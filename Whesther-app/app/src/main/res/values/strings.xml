@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Wheather-app</string>
+    <string name="app_name">Weather-app</string>
+    <string name="denied">Отказано</string>
+    <string name="turn_on_location">Включите геолокацию</string>
+    <string name="null_received">Получен Null</string>
+    <string name="temperature">%s°C</string>
 </resources>

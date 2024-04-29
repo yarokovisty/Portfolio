@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="style_current_img">
+        <item name="android:layout_width">@dimen/width_current_icon</item>
+        <item name="android:layout_height">@dimen/height_current_icon</item>
+    </style>
+
+    <style name="BaseText">
+        <item name="android:textColor">@color/text</item>
+    </style>
+
+    <style name="style_description_text" parent="BaseText">
+        <item name="android:textSize">@dimen/size_description_text</item>
+    </style>
+
+    <style name="style_current_temp" parent="BaseText">
+        <item name="android:textSize">@dimen/size_text_current_temp</item>
+    </style>
+
+</resources>

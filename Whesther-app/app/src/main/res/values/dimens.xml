@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="marginTop_content_weather">32dp</dimen>
+    
+    <dimen name="width_current_icon">150dp</dimen>
+    <dimen name="height_current_icon">150dp</dimen>
+
+    <dimen name="size_description_text">12sp</dimen>
+
+    <dimen name="marginTop_type_weather_text">4dp</dimen>
+
+    <dimen name="marginTop_current_temp">24dp</dimen>
+    <dimen name="size_text_current_temp">64sp</dimen>
+</resources>
