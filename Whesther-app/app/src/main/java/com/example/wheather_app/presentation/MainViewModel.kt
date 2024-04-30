@@ -27,17 +27,25 @@ class MainViewModel : ViewModel() {
     val error: LiveData<String>
         get() = _error
 
+    private val _typeCurrentWeather = MutableLiveData<Int>()
+    val typeCurrentWeather: LiveData<Int>
+        get() = _typeCurrentWeather
+
     fun getCurrentWeather(lat: Double, lon: Double) {
         _isLoading.value = true
 
         viewModelScope.launch {
             try {
-                _currentWeatherItem.value = getCurrentWeatherUseCase(lat, lon).toCurrentWeatherItem()
+                val item = getCurrentWeatherUseCase(lat, lon)
+                _currentWeatherItem.value = item
+                _typeCurrentWeather.value = item.main
                 _isLoading.value = false
             } catch (ex: Exception) {
                 _error.value = ex.message
             }
         }
     }
+
+
 
 }

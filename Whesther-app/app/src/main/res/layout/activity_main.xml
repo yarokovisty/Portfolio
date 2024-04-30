@@ -2,19 +2,30 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cloudy_background"
     tools:context=".presentation.MainActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <ProgressBar
+            android:id="@+id/pbLoadWeather"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/errorScreen"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -22,32 +33,16 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/contentScreen"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
+            android:layout_height="match_parent">
 
-            <FrameLayout
-                android:id="@+id/frameLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/marginTop_content_weather"
+            <ImageView
+                android:id="@+id/imgCurrentTypeWeather"
+                style="@style/style_current_img"
+                android:src="@drawable/icon_cloud"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/imgCurrentTypeWeather"
-                    style="@style/style_current_img"
-                    android:src="@drawable/icon_cloud"
-                    tools:ignore="ContentDescription" />
-
-                <ProgressBar
-                    android:id="@+id/pbCurrentIconTypeWeather"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="gone" />
-            </FrameLayout>
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tvCurrentTypeWeather"
@@ -56,9 +51,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginTop_type_weather_text"
                 android:textAllCaps="true"
-                app:layout_constraintEnd_toEndOf="@+id/frameLayout"
-                app:layout_constraintStart_toStartOf="@+id/frameLayout"
-                app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+                app:layout_constraintEnd_toEndOf="@+id/imgCurrentTypeWeather"
+                app:layout_constraintStart_toStartOf="@+id/imgCurrentTypeWeather"
+                app:layout_constraintTop_toBottomOf="@+id/imgCurrentTypeWeather"
                 tools:text="Пасмурно" />
 
             <TextView
@@ -71,11 +66,81 @@
                 app:layout_constraintStart_toStartOf="@+id/tvCurrentTypeWeather"
                 app:layout_constraintTop_toBottomOf="@+id/tvCurrentTypeWeather"
                 tools:text="@string/temperature" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvParamCurrentWeather"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvCurrentTemp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tvTitleWind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        app:layout_constraintBottom_toTopOf="@+id/tvParamWind"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed" />
+
+                    <TextView
+                        android:id="@+id/tvTitleHumidity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        app:layout_constraintEnd_toStartOf="@+id/tvTitleVisibility"
+                        app:layout_constraintStart_toEndOf="@+id/tvTitleWind"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/tvParamHumidity"
+                        app:layout_constraintVertical_chainStyle="packed"/>
+
+                    <TextView
+                        android:id="@+id/tvTitleVisibility"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/tvParamVisibility"
+                        app:layout_constraintVertical_chainStyle="packed"/>
+
+                    <TextView
+                        android:id="@+id/tvParamWind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTitleWind" />
+
+                    <TextView
+                        android:id="@+id/tvParamHumidity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvParamVisibility"
+                        app:layout_constraintStart_toEndOf="@+id/tvParamWind"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTitleHumidity" />
+
+                    <TextView
+                        android:id="@+id/tvParamVisibility"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTitleVisibility"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
-
-
-
 
 
 </androidx.core.widget.NestedScrollView>

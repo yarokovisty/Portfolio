@@ -4,4 +4,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="icon">#2b3b5e</color>
     <color name="text">#2b3b5e</color>
+    <color name="rainy_background">#47e6e3</color>
+    <color name="clear_background">#ffbd8a</color>
+    <color name="cloudy_background">#adadad</color>
+    <color name="stormy_background">#e8d872</color>
+    <color name="snow_background">#fff</color>
 </resources>
