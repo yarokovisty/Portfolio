@@ -11,4 +11,11 @@
 
     <dimen name="marginTop_current_temp">24dp</dimen>
     <dimen name="size_text_current_temp">64sp</dimen>
+
+    <dimen name="margin_card_view">16dp</dimen>
+    <dimen name="corner_radius_card_view">14dp</dimen>
+    <dimen name="padding_card_view">16dp</dimen>
+
+    <dimen name="size_text_card_view">16sp</dimen>
+    <dimen name="marginBottom_text_card_view">4dp</dimen>
 </resources>

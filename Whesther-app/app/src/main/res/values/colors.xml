@@ -5,8 +5,13 @@
     <color name="icon">#2b3b5e</color>
     <color name="text">#2b3b5e</color>
     <color name="rainy_background">#47e6e3</color>
+    <color name="rainy_card_view">#8cdedc</color>
     <color name="clear_background">#ffbd8a</color>
+    <color name="clear_card_view">#ffcea8</color>
     <color name="cloudy_background">#adadad</color>
+    <color name="cloudy_card_view">#d4d4d4</color>
     <color name="stormy_background">#e8d872</color>
+    <color name="stormy_card_view">#f2e380</color>
     <color name="snow_background">#fff</color>
+    <color name="snow_card_view">#e0e0e0</color>
 </resources>

@@ -16,5 +16,21 @@
     <style name="style_current_temp" parent="BaseText">
         <item name="android:textSize">@dimen/size_text_current_temp</item>
     </style>
+    
+    <style name="BaseCardView" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_margin">@dimen/margin_card_view</item>
+        <item name="contentPadding">@dimen/padding_card_view</item>
+        <item name="cardCornerRadius">@dimen/corner_radius_card_view</item>
+    </style>
+
+    <style name="style_title_card_view" parent="BaseText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/size_text_card_view</item>
+        <item name="android:layout_marginBottom">@dimen/marginBottom_text_card_view</item>
+    </style>
+
+    <style name="style_param_text_card_view" parent="BaseText">
+        <item name="android:textSize">@dimen/size_text_card_view</item>
+    </style>
 
 </resources>

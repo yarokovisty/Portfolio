@@ -4,4 +4,10 @@
     <string name="turn_on_location">Включите геолокацию</string>
     <string name="null_received">Получен Null</string>
     <string name="temperature">%s°C</string>
+    <string name="wind">Ветер</string>
+    <string name="humidity">Влажность</string>
+    <string name="visibility">Видимость</string>
+    <string name="param_wind">%s м/с</string>
+    <string name="param_humidity">%s%%</string>
+    <string name="param_visibility">%s км</string>
 </resources>

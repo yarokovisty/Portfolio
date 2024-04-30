@@ -7,10 +7,14 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import com.example.wheather_app.R
 import com.example.wheather_app.databinding.ActivityMainBinding
@@ -44,7 +48,11 @@ class MainActivity : AppCompatActivity() {
             with(binding) {
                 tvCurrentTypeWeather.text = weather.description
                 tvCurrentTemp.text = getString( R.string.temperature, roundTemp(weather.temp))
+                tvParamWind.text = getString(R.string.param_wind, weather.wind.toString())
+                tvParamHumidity.text = getString(R.string.param_humidity, weather.humidity.toString())
+                tvParamVisibility.text = getString(R.string.param_visibility, mapperMToKm(weather.visibility))
             }
+            setColorCardView(getCardViewColor(weather.main))
         }
         viewModel.typeCurrentWeather.observe(this) {type ->
             binding.imgCurrentTypeWeather.setImageResource(getIconCurrentWeather(type))
@@ -82,6 +90,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setColorCardView(color: Int) {
+        val drawable = ContextCompat.getDrawable(this, R.drawable.card_background)
+        drawable?.setTint(ContextCompat.getColor(this, color))
+
+        binding.contentScreen.forEach { view ->
+            if (view is CardView) {
+                view.background = drawable
+            }
+        }
+    }
+
     private fun getIconCurrentWeather(type: Int): Int {
         return when(type) {
             in THUNDERSTORM -> R.drawable.icon_thunderstorm
@@ -99,10 +118,24 @@ class MainActivity : AppCompatActivity() {
         return when(type) {
             in THUNDERSTORM -> R.color.stormy_background
             in DRIZZLE -> R.color.rainy_background
-            in RAIN -> R.color.snow_background
+            in RAIN -> R.color.rainy_background
+            in SNOW -> R.color.snow_background
             in ATMOSPHERE -> R.color.cloudy_background
             CLEAR -> R.color.clear_background
             in CLOUDS -> R.color.cloudy_background
+            else -> throw RuntimeException("There isn't such type ${type}")
+        }
+    }
+
+    private fun getCardViewColor(type: Int): Int {
+        return when(type) {
+            in THUNDERSTORM -> R.color.stormy_card_view
+            in DRIZZLE -> R.color.rainy_card_view
+            in RAIN -> R.color.rainy_card_view
+            in SNOW -> R.color.snow_card_view
+            in ATMOSPHERE -> R.color.cloudy_background
+            CLEAR -> R.color.clear_card_view
+            in CLOUDS -> R.color.cloudy_card_view
             else -> throw RuntimeException("There isn't such type ${type}")
         }
     }
@@ -125,24 +158,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getCurrentLocation() {
-        if (!checkPermission()) {
-            requestPermission()
-            return
-        }
+        if (checkPermission()) {
+            if (isLocationEnabled()) {
+                fusedLocationProviderClient.lastLocation.addOnCompleteListener(this) { task ->
+                    val location = task.result
 
-        if (!isLocationEnabled()) {
-            newIntentLocationSettings()
-            return
-        }
-
-        fusedLocationProviderClient.lastLocation.addOnCompleteListener(this) { task ->
-            val location = task.result
-
-            if (location == null) {
-                Toast.makeText(this, R.string.null_received, Toast.LENGTH_SHORT).show()
+                    if (location == null) {
+                        Toast.makeText(this, getString(R.string.null_received), Toast.LENGTH_SHORT).show()
+                    } else {
+                        viewModel.getCurrentWeather(location.latitude, location.longitude)
+                    }
+                }
             } else {
-                viewModel.getCurrentWeather(location.latitude, location.longitude)
+                newIntentLocationSettings()
             }
+        } else {
+            requestPermission()
         }
 
 
@@ -183,6 +214,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun roundTemp(temp: Double) = temp.toInt().toString()
 
+    private fun mapperMToKm(num: Int) = (num / KM).toString()
+
     companion object {
         private val THUNDERSTORM = 200..299
         private val DRIZZLE = 300..399
@@ -192,6 +225,7 @@ class MainActivity : AppCompatActivity() {
         private const val CLEAR = 800
         private val CLOUDS = 801..804
         private const val PERMISSION_REQUEST_ACCESS_LOCATION = 100
+        private const val KM = 1000
         private val ARR_PERMISSION = arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION

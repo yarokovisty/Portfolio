@@ -5,7 +5,7 @@
     android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cloudy_background"
+    android:background="@color/ic_launcher_background"
     tools:context=".presentation.MainActivity">
 
     <FrameLayout
@@ -69,6 +69,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvParamCurrentWeather"
+                style="@style/BaseCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -81,9 +82,10 @@
 
                     <TextView
                         android:id="@+id/tvTitleWind"
+                        style="@style/style_title_card_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
+                        android:text="@string/wind"
                         app:layout_constraintBottom_toTopOf="@+id/tvParamWind"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -91,52 +93,56 @@
 
                     <TextView
                         android:id="@+id/tvTitleHumidity"
+                        style="@style/style_title_card_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
+                        android:text="@string/humidity"
+                        app:layout_constraintBottom_toTopOf="@+id/tvParamHumidity"
                         app:layout_constraintEnd_toStartOf="@+id/tvTitleVisibility"
                         app:layout_constraintStart_toEndOf="@+id/tvTitleWind"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/tvParamHumidity"
-                        app:layout_constraintVertical_chainStyle="packed"/>
+                        app:layout_constraintVertical_chainStyle="packed" />
 
                     <TextView
                         android:id="@+id/tvTitleVisibility"
+                        style="@style/style_title_card_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
+                        android:text="@string/visibility"
+                        app:layout_constraintBottom_toTopOf="@+id/tvParamVisibility"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/tvParamVisibility"
-                        app:layout_constraintVertical_chainStyle="packed"/>
+                        app:layout_constraintVertical_chainStyle="packed" />
 
                     <TextView
                         android:id="@+id/tvParamWind"
+                        style="@style/style_param_text_card_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvTitleWind" />
+                        app:layout_constraintTop_toBottomOf="@+id/tvTitleWind"
+                        tools:text="@string/param_wind" />
 
                     <TextView
                         android:id="@+id/tvParamHumidity"
+                        style="@style/style_param_text_card_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/tvParamVisibility"
-                        app:layout_constraintStart_toEndOf="@+id/tvParamWind"
-                        app:layout_constraintTop_toBottomOf="@+id/tvTitleHumidity" />
+                        app:layout_constraintStart_toStartOf="@+id/tvTitleHumidity"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTitleHumidity"
+                        tools:text="@string/param_humidity" />
 
                     <TextView
                         android:id="@+id/tvParamVisibility"
+                        style="@style/style_param_text_card_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvTitleVisibility"/>
+                        app:layout_constraintStart_toStartOf="@+id/tvTitleVisibility"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTitleVisibility"
+                        tools:text="@string/param_visibility" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
