@@ -9,6 +9,12 @@
         <item name="android:textColor">@color/text</item>
     </style>
 
+    <style name="style_description_icon">
+        <item name="android:layout_width">@dimen/width_description_icon</item>
+        <item name="android:layout_height">@dimen/height_description_icon</item>
+        <item name="android:layout_marginTop">@dimen/marginTop_description_icon</item>
+    </style>
+
     <style name="style_description_text" parent="BaseText">
         <item name="android:textSize">@dimen/size_description_text</item>
     </style>

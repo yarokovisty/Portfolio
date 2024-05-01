@@ -25,6 +25,15 @@ interface WeatherApi {
         @Query("lang") lang: String = LANG
     ) : HourlyWeatherDto
 
+    @GET("forecast/daily?")
+    suspend fun getDailyWeatherDto(
+        @Query("lat") lat: Double = LAT_TOMSK,
+        @Query("lon") lon: Double = LON_TOMSK,
+        @Query("appid") appid: String = API_KEY,
+        @Query("units") units: String = UNITS,
+        @Query("lang") lang: String = LANG
+    ) : HourlyWeatherDto
+
     private companion object {
         const val API_KEY = "bc509216035463e1774a8d5c0ae0b096"
         const val UNITS = "metric"

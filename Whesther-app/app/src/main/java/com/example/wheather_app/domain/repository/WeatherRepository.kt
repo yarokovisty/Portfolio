@@ -8,4 +8,5 @@ interface WeatherRepository {
     suspend fun getCurrentWeather(lat: Double, lon: Double): CurrentWeatherItem
 
     suspend fun getHourlyWeather(lat: Double, lon: Double): List<HourlyWeatherItem>
+
 }

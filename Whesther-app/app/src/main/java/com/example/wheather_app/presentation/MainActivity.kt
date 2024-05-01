@@ -30,6 +30,7 @@ import java.util.Date
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var adapter: DailyForecastAdapter
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,8 +40,10 @@ class MainActivity : AppCompatActivity() {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
+        setupRecyclerView()
         loadContent()
         observerViewModel()
+
     }
 
     override fun onStart() {
@@ -55,6 +58,9 @@ class MainActivity : AppCompatActivity() {
         viewModel.hourlyWeatherList.observe(this) {forecast ->
             displayHourlyForecast(forecast)
         }
+        viewModel.dailyForecastList.observe(this) {forecast ->
+            adapter.dailyForecastList = forecast
+        }
         viewModel.typeCurrentWeather.observe(this) {type ->
             displayCurrentTypeWeather(type)
         }
@@ -64,6 +70,11 @@ class MainActivity : AppCompatActivity() {
         viewModel.error.observe(this) { errorMessage ->
             errorContent(errorMessage)
         }
+    }
+
+    private fun setupRecyclerView() {
+        adapter = DailyForecastAdapter()
+        binding.rvDailyForecastList.adapter = adapter
     }
 
     private fun showContent() {
@@ -249,6 +260,16 @@ class MainActivity : AppCompatActivity() {
             tvThirdWeatherTime.text = templateTime(forecast[2].time)
             tvFourthWeatherTime.text = templateTime(forecast[3].time)
             tvFifthWeatherTime.text = templateTime(forecast[4].time)
+            imgFirstWeatherType.setImageResource(getIconCurrentWeather(forecast[0].type))
+            imgSecondWeatherType.setImageResource(getIconCurrentWeather(forecast[1].type))
+            imgThirdWeatherType.setImageResource(getIconCurrentWeather(forecast[2].type))
+            imgFourthWeatherType.setImageResource(getIconCurrentWeather(forecast[3].type))
+            imgFifthWeatherType.setImageResource(getIconCurrentWeather(forecast[4].type))
+            tvFirstWeatherTemp.text = roundTemp(forecast[0].temperature)
+            tvSecondWeatherTemp.text = roundTemp(forecast[1].temperature)
+            tvThirdWeatherTemp.text = roundTemp(forecast[2].temperature)
+            tvFourthWeatherTemp.text = roundTemp(forecast[3].temperature)
+            tvFifthWeatherTemp.text = roundTemp(forecast[4].temperature)
         }
     }
 

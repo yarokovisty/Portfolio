@@ -2,7 +2,6 @@ package com.example.wheather_app.data.mappers
 
 import com.example.wheather_app.data.retrofit.dto.current_weather.CurrentWeatherDto
 import com.example.wheather_app.data.retrofit.dto.hourly_forecast.HourlyWeather
-import com.example.wheather_app.data.retrofit.dto.hourly_forecast.HourlyWeatherDto
 import com.example.wheather_app.domain.entity.CurrentWeatherItem
 import com.example.wheather_app.domain.entity.HourlyWeatherItem
 
@@ -24,3 +23,4 @@ fun HourlyWeather.toHourlyWeatherItem(): HourlyWeatherItem {
         temperature = main.temp
     )
 }
+

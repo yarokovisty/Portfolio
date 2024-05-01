@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="marginTop_content_weather">32dp</dimen>
+    <dimen name="marginTop_content_weather">48dp</dimen>
     
     <dimen name="width_current_icon">150dp</dimen>
     <dimen name="height_current_icon">150dp</dimen>
+
+    <dimen name="width_description_icon">24dp</dimen>
+    <dimen name="height_description_icon">24dp</dimen>
+    <dimen name="marginTop_description_icon">4dp</dimen>
 
     <dimen name="size_description_text">12sp</dimen>
 
@@ -20,4 +24,8 @@
     <dimen name="marginBottom_text_card_view">4dp</dimen>
     
     <dimen name="marginTop_text_hourly_forecast">8dp</dimen>
+
+    <dimen name="marginTop_text_param_hourly_forecast">4dp</dimen>
+
+    <dimen name="marginVertical_item_daily_forecast">8dp</dimen>
 </resources>

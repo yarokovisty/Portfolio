@@ -26,6 +26,10 @@ class MainViewModel : ViewModel() {
     val hourlyWeatherList: LiveData<List<HourlyWeatherItem>>
         get() = _hourlyWeatherList
 
+    private val _dailyForecastList = MutableLiveData<List<HourlyWeatherItem>>()
+    val dailyForecastList: LiveData<List<HourlyWeatherItem>>
+        get() = _dailyForecastList
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean>
         get() = _isLoading
@@ -39,14 +43,14 @@ class MainViewModel : ViewModel() {
         get() = _typeCurrentWeather
 
     fun getCurrentWeather(lat: Double, lon: Double) {
-        _isLoading.value = true
+
 
         viewModelScope.launch {
             try {
                 val item = getCurrentWeatherUseCase(lat, lon)
                 _currentWeatherItem.value = item
                 _typeCurrentWeather.value = item.main
-                _isLoading.value = false
+
             } catch (ex: Exception) {
                 _error.value = ex.message
             }
@@ -54,12 +58,14 @@ class MainViewModel : ViewModel() {
     }
 
     fun getHourlyWeather(lat: Double, lon: Double, currentTime: String) {
-
+        _isLoading.value = true
 
         viewModelScope.launch {
             try {
                 val item = getHourlyWeatherUseCase(lat, lon)
                 _hourlyWeatherList.value = sortHourlyForecast(item, currentTime)
+                _dailyForecastList.value = sortDailyForecast(item)
+                _isLoading.value = false
             } catch (ex: Exception) {
                 _error.value = ex.message
             }
@@ -77,6 +83,25 @@ class MainViewModel : ViewModel() {
         }
 
         return forecastSort
+    }
+
+    private fun sortDailyForecast(forecast: List<HourlyWeatherItem>): List<HourlyWeatherItem> {
+        val forecastSort = mutableListOf<HourlyWeatherItem>()
+
+        for (i in forecast) {
+            val time = i.time.split(" ")[1].substringBefore(SEPARATOR_TIME)
+            if (time == MIDDAY) {
+                forecastSort.add(i)
+            }
+
+        }
+
+        return forecastSort
+    }
+
+    companion object {
+        private const val MIDDAY = "12"
+        private const val SEPARATOR_TIME = ":"
     }
 
 
