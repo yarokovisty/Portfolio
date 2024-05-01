@@ -1,4 +1,4 @@
-package com.example.wheather_app.data.retrofit.dto
+package com.example.wheather_app.data.retrofit.dto.current_weather
 
 data class Main(
     val feels_like: Double,

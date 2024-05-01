@@ -1,6 +1,7 @@
 package com.example.wheather_app.presentation
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -18,9 +19,13 @@ import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import com.example.wheather_app.R
 import com.example.wheather_app.databinding.ActivityMainBinding
+import com.example.wheather_app.domain.entity.CurrentWeatherItem
+import com.example.wheather_app.domain.entity.HourlyWeatherItem
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import java.lang.RuntimeException
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -45,18 +50,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun observerViewModel() {
         viewModel.currentWeatherItem.observe(this) { weather ->
-            with(binding) {
-                tvCurrentTypeWeather.text = weather.description
-                tvCurrentTemp.text = getString( R.string.temperature, roundTemp(weather.temp))
-                tvParamWind.text = getString(R.string.param_wind, weather.wind.toString())
-                tvParamHumidity.text = getString(R.string.param_humidity, weather.humidity.toString())
-                tvParamVisibility.text = getString(R.string.param_visibility, mapperMToKm(weather.visibility))
-            }
-            setColorCardView(getCardViewColor(weather.main))
+            displayCurrentWeather(weather)
+        }
+        viewModel.hourlyWeatherList.observe(this) {forecast ->
+            displayHourlyForecast(forecast)
         }
         viewModel.typeCurrentWeather.observe(this) {type ->
-            binding.imgCurrentTypeWeather.setImageResource(getIconCurrentWeather(type))
-            binding.mainContainer.setBackgroundResource(getBackgroundColor(type))
+            displayCurrentTypeWeather(type)
         }
         viewModel.isLoading.observe(this) { isLoading ->
             if (!isLoading) showContent()
@@ -167,6 +167,7 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this, getString(R.string.null_received), Toast.LENGTH_SHORT).show()
                     } else {
                         viewModel.getCurrentWeather(location.latitude, location.longitude)
+                        viewModel.getHourlyWeather(location.latitude, location.longitude, getCurrentDateTime())
                     }
                 }
             } else {
@@ -215,6 +216,41 @@ class MainActivity : AppCompatActivity() {
     private fun roundTemp(temp: Double) = temp.toInt().toString()
 
     private fun mapperMToKm(num: Int) = (num / KM).toString()
+
+    private fun templateTime(time: String) = time.split(" ")[1].subSequence(0..4)
+
+    @SuppressLint("SimpleDateFormat")
+    fun getCurrentDateTime(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val currentTime = Date()
+        return dateFormat.format(currentTime)
+    }
+
+    private fun displayCurrentWeather(weather: CurrentWeatherItem) {
+        with(binding) {
+            tvCurrentTypeWeather.text = weather.description
+            tvCurrentTemp.text = getString( R.string.temperature, roundTemp(weather.temp))
+            tvParamWind.text = getString(R.string.param_wind, weather.wind.toString())
+            tvParamHumidity.text = getString(R.string.param_humidity, weather.humidity.toString())
+            tvParamVisibility.text = getString(R.string.param_visibility, mapperMToKm(weather.visibility))
+        }
+        setColorCardView(getCardViewColor(weather.main))
+    }
+
+    private fun displayCurrentTypeWeather(type: Int) {
+        binding.imgCurrentTypeWeather.setImageResource(getIconCurrentWeather(type))
+        binding.mainContainer.setBackgroundResource(getBackgroundColor(type))
+    }
+
+    private fun displayHourlyForecast(forecast: List<HourlyWeatherItem>) {
+        with(binding) {
+            tvFirstWeatherTime.text = templateTime(forecast[0].time)
+            tvSecondWeatherTime.text = templateTime(forecast[1].time)
+            tvThirdWeatherTime.text = templateTime(forecast[2].time)
+            tvFourthWeatherTime.text = templateTime(forecast[3].time)
+            tvFifthWeatherTime.text = templateTime(forecast[4].time)
+        }
+    }
 
     companion object {
         private val THUNDERSTORM = 200..299

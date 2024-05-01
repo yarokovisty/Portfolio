@@ -10,4 +10,5 @@
     <string name="param_wind">%s м/с</string>
     <string name="param_humidity">%s%%</string>
     <string name="param_visibility">%s км</string>
+    <string name="hourly_forecast">Почасовой прогноз</string>
 </resources>

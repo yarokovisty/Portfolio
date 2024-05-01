@@ -145,6 +145,81 @@
                         tools:text="@string/param_visibility" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvWeatherWholeDay"
+                style="@style/BaseCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cvParamCurrentWeather">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tvTitleHourlyForecast"
+                        style="@style/style_title_card_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginTop_text_hourly_forecast"
+                        android:text="@string/hourly_forecast"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvFirstWeatherTime"
+                        style="@style/style_param_text_card_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginTop_text_hourly_forecast"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTitleHourlyForecast"
+                        tools:text="9:00" />
+
+                    <TextView
+                        android:id="@+id/tvSecondWeatherTime"
+                        style="@style/style_param_text_card_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toStartOf="@+id/tvThirdWeatherTime"
+                        app:layout_constraintStart_toEndOf="@+id/tvFirstWeatherTime"
+                        app:layout_constraintTop_toTopOf="@+id/tvFirstWeatherTime"
+                        tools:text="12:00" />
+
+                    <TextView
+                        android:id="@+id/tvThirdWeatherTime"
+                        style="@style/style_param_text_card_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toStartOf="@+id/tvFourthWeatherTime"
+                        app:layout_constraintStart_toEndOf="@+id/tvSecondWeatherTime"
+                        app:layout_constraintTop_toTopOf="@+id/tvSecondWeatherTime"
+                        tools:text="15:00" />
+
+                    <TextView
+                        android:id="@+id/tvFourthWeatherTime"
+                        style="@style/style_param_text_card_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toStartOf="@+id/tvFifthWeatherTime"
+                        app:layout_constraintStart_toEndOf="@+id/tvThirdWeatherTime"
+                        app:layout_constraintTop_toTopOf="@+id/tvThirdWeatherTime"
+                        tools:text="18:00" />
+
+                    <TextView
+                        android:id="@+id/tvFifthWeatherTime"
+                        style="@style/style_param_text_card_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tvFourthWeatherTime"
+                        tools:text="21:00" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 

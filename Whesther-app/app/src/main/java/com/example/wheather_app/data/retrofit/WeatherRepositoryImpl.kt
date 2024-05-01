@@ -1,8 +1,9 @@
 package com.example.wheather_app.data.retrofit
 
 import com.example.wheather_app.data.mappers.toCurrentWeatherItem
-import com.example.wheather_app.data.retrofit.dto.CurrentWeatherDto
+import com.example.wheather_app.data.mappers.toHourlyWeatherItem
 import com.example.wheather_app.domain.entity.CurrentWeatherItem
+import com.example.wheather_app.domain.entity.HourlyWeatherItem
 import com.example.wheather_app.domain.repository.WeatherRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -31,6 +32,10 @@ class WeatherRepositoryImpl : WeatherRepository {
 
     override suspend fun getCurrentWeather(lat: Double, lon: Double): CurrentWeatherItem {
         return weatherApi.getCurrentWeatherDto(lat, lon).toCurrentWeatherItem()
+    }
+
+    override suspend fun getHourlyWeather(lat: Double, lon: Double): List<HourlyWeatherItem> {
+        return weatherApi.getHourlyWeatherDto(lat, lon).list.map { it.toHourlyWeatherItem() }
     }
 
     companion object {

@@ -1,7 +1,5 @@
 package com.example.wheather_app.domain.usecase
 
-import com.example.wheather_app.data.retrofit.WeatherRepositoryImpl
-import com.example.wheather_app.data.retrofit.dto.CurrentWeatherDto
 import com.example.wheather_app.domain.entity.CurrentWeatherItem
 import com.example.wheather_app.domain.repository.WeatherRepository
 
