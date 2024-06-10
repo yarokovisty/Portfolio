@@ -1,4 +1,4 @@
-package com.example.weatherapp.data.remote.model
+package com.example.weatherapp.data.remote.model.currentforecast
 
 data class CurrentForecastDto(
     val base: String,

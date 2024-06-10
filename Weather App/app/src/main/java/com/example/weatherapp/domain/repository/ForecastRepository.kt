@@ -6,9 +6,9 @@ import com.example.weatherapp.domain.entity.HourlyForecastItem
 
 interface ForecastRepository {
 
-    suspend fun getCurrentForecast(): CurrentForecastItem
+    suspend fun getCurrentForecast(lat: Double, lon: Double): CurrentForecastItem
 
-    suspend fun getHourlyForecast(): List<HourlyForecastItem>
+    suspend fun getHourlyForecast(lat: Double, lon: Double): List<HourlyForecastItem>
 
-    suspend fun getDailyForecast(): List<DailyForecastItem>
+    suspend fun getDailyForecast(lat: Double, lon: Double): List<DailyForecastItem>
 }

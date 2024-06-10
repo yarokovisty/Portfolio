@@ -1,4 +1,4 @@
-package com.example.weatherapp.data.remote.model
+package com.example.weatherapp.data.remote.model.dailyforecast
 
 data class Main(
     val feels_like: Double,

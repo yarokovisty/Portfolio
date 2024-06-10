@@ -1,4 +1,4 @@
-package com.example.weatherapp.data.remote.model
+package com.example.weatherapp.data.remote.model.hourlyforecast
 
 data class Wind(
     val deg: Int,
