@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="padding_content">16dp</dimen>
+
+    <dimen name="large_margin">36dp</dimen>
+    <dimen name="big_margin">24dp</dimen>
+    <dimen name="medium_margin">16dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="tiny_margin">4dp</dimen>
+    
+    <dimen name="size_text_headline1">60sp</dimen>
+    <dimen name="size_text_headline2">14sp</dimen>
+
+    <dimen name="size_text_body1">14sp</dimen>
+
+    <dimen name="size_headline_img">128dp</dimen>
+
+    <dimen name="corner_radius_card_view">8dp</dimen>
+
+    <dimen name="elevation_card_view">0dp</dimen>
+
+</resources>

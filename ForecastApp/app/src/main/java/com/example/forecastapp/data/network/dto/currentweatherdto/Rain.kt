@@ -1,4 +1,4 @@
-package com.example.forecastapp.data.network.dto
+package com.example.forecastapp.data.network.dto.currentweatherdto
 
 import com.google.gson.annotations.SerializedName
 

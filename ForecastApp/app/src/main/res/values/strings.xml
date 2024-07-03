@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">ForecastApp</string>
+    <string name="app_name">Forecast app</string>
+
+    <string name="template_temperature" translatable="false">%s°C</string>
+    <string name="template_wind">%s km/h</string>
+    <string name="template_humidity" translatable="false">%s%%</string>
+    <string name="template_visibility">%s km</string>
+
+    <string name="title_current_weather_wind">Wind</string>
+    <string name="title_current_weather_humidity">Humidity</string>
+    <string name="title_current_weather_visibility">Visibility</string>
+
 </resources>

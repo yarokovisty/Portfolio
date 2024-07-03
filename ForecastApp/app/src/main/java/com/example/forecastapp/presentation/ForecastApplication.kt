@@ -1,4 +1,4 @@
-package com.example.forecastapp.ui
+package com.example.forecastapp.presentation
 
 import android.app.Application
 import com.example.forecastapp.di.component.DaggerApplicationComponent

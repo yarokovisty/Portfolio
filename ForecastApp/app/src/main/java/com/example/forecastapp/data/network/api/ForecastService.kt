@@ -1,6 +1,6 @@
 package com.example.forecastapp.data.network.api
 
-import com.example.forecastapp.data.network.dto.CurrentWeatherDTO
+import com.example.forecastapp.data.network.dto.currentweatherdto.CurrentWeatherDTO
 import retrofit2.http.GET
 import retrofit2.http.Query
 

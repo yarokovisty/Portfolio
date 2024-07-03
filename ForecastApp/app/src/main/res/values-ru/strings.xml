@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Прогноз погоды</string>
+    <string name="title_current_weather_wind">Ветер</string>
+    <string name="title_current_weather_humidity">Влажность</string>
+    <string name="title_current_weather_visibility">Видимость</string>
+    <string name="template_wind">%s км/ч</string>
+    <string name="template_visibility">%s м</string>
+</resources>

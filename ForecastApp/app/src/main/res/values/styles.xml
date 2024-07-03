@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    // CardView
+    <style name="Widget.Base.CardView" parent="CardView">
+        <item name="contentPadding">@dimen/padding_content</item>
+        <item name="cardCornerRadius">@dimen/corner_radius_card_view</item>
+        <item name="cardElevation">@dimen/elevation_card_view</item>
+    </style>
+
+    // Image
+    <style name="ImageAppearance.Headline" parent="">
+        <item name="android:layout_width">@dimen/size_headline_img</item>
+        <item name="android:layout_height">@dimen/size_headline_img</item>
+    </style>
+
+    // Text - Headline
+    <style name="TextAppearance.Base.Headline" parent="">
+        <item name="android:textColor">@color/primary_font</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Headline1" parent="TextAppearance.Base.Headline">
+        <item name="android:textSize">@dimen/size_text_headline1</item>
+    </style>
+
+    <style name="TextAppearance.Headline2" parent="TextAppearance.Base.Headline">
+        <item name="android:textSize">@dimen/size_text_headline2</item>
+    </style>
+
+    // Text - Body
+    <style name="TextAppearance.Base.Body" parent="">
+        <item name="android:textColor">@color/primary_font</item>
+    </style>
+
+    <style name="TextAppearance.Body1" parent="TextAppearance.Base.Body">
+        <item name="android:textSize">@dimen/size_text_body1</item>
+    </style>
+</resources>

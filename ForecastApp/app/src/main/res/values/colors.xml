@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    <color name="primary_bg_clear">#ffbe94</color>
+    <color name="secondary_bg_clear">#ffcca7</color>
+
+    <color name="primary_bg_cloudy">#c1c1c1</color>
+    <color name="secondary_bg_cloudy">#cfcfd1</color>
+
+    <color name="primary_bg_rainy">#70f1ec</color>
+    <color name="secondary_bg_rainy">#97f5f5</color>
+
+    <color name="primary_bg_snow">#fff</color>
+    <color name="secondary_bg_snow">#ededed</color>
+
+    <color name="primary_bg_thunderstorm">#e6cc77</color>
+    <color name="secondary_bg_thunderstorm">#efd580</color>
+
+    <color name="primary_bg_mist">#c1c1c1</color>
+    <color name="secondary_bg_mist">#cfcfd1</color>
+
+    <color name="primary_font">#4b4465</color>
 </resources>
