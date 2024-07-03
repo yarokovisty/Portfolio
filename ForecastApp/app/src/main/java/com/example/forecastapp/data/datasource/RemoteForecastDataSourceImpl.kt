@@ -2,6 +2,7 @@ package com.example.forecastapp.data.datasource
 
 import com.example.forecastapp.data.network.api.ForecastService
 import com.example.forecastapp.data.network.dto.currentweatherdto.CurrentWeatherDTO
+import com.example.forecastapp.data.network.dto.hourlyforecastdto.HourlyForecastDTO
 import com.example.forecastapp.domain.entity.Result
 import javax.inject.Inject
 
@@ -17,4 +18,11 @@ class RemoteForecastDataSourceImpl @Inject constructor(
             Result.Error(ex)
         }
 
+    override suspend fun getHourlyForecast(lon: Double, lat: Double): Result<HourlyForecastDTO> =
+        try {
+            val hourlyForecastDTO = forecastService.getHourlyForecast(lat, lon)
+            Result.Success(hourlyForecastDTO)
+        } catch (ex: Exception) {
+            Result.Error(ex)
+        }
 }

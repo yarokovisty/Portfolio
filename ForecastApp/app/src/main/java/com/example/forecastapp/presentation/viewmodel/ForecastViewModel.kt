@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.forecastapp.domain.entity.Result
 import com.example.forecastapp.domain.usecase.GetCurrentWeatherUseCase
+import com.example.forecastapp.domain.usecase.GetHourlyForecastUseCase
 import com.example.forecastapp.presentation.state.ForecastState
 import kotlinx.coroutines.async
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +14,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ForecastViewModel @Inject constructor(
-    private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase
+    private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase,
+    private val getHourlyForecastUseCase: GetHourlyForecastUseCase
 ) : ViewModel() {
 
     private val _forecastState = MutableLiveData<ForecastState>()
@@ -29,13 +31,22 @@ class ForecastViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentWeatherItemDeferred = async { getCurrentWeather(lon, lat) }
+            val listHourlyForecastDeferred = async { getHourlyForecastUseCase(lon, lat) }
 
-            when (val resultCurrentWeatherItem = currentWeatherItemDeferred.await()) {
-                is Result.Success -> {
-                    _forecastState.value = ForecastState.Success(resultCurrentWeatherItem.data)
+            val resultCurrentWeatherItem = currentWeatherItemDeferred.await()
+            val resultListHourlyForecastItem = listHourlyForecastDeferred.await()
+
+            when {
+                resultCurrentWeatherItem is Result.Success
+                        && resultListHourlyForecastItem is Result.Success -> {
+                    _forecastState.value = ForecastState.Success(
+                        resultCurrentWeatherItem.data,
+                        resultListHourlyForecastItem.data
+                    )
                 }
 
-                is Result.Error -> {
+                resultCurrentWeatherItem is Result.Error
+                        || resultListHourlyForecastItem is Result.Error -> {
                     _forecastState.value = ForecastState.Error("Error")
                 }
             }
@@ -45,6 +56,10 @@ class ForecastViewModel @Inject constructor(
 
     private suspend fun getCurrentWeather(lon: Double, lat: Double) = with(Dispatchers.IO) {
         getCurrentWeatherUseCase(lon, lat)
+    }
+
+    private suspend fun getHourlyForecast(lon: Double, lat: Double) = with(Dispatchers.IO) {
+        getHourlyForecastUseCase(lon, lat)
     }
 
 }

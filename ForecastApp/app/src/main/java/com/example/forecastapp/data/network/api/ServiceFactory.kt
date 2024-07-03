@@ -41,4 +41,5 @@ object ServiceFactory {
     val forecastService by lazy {
         retrofit.create(ForecastService::class.java)
     }
+
 }

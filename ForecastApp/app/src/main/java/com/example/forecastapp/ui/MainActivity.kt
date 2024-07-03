@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.forecastapp.R
 import com.example.forecastapp.databinding.ActivityMainBinding
 import com.example.forecastapp.domain.entity.CurrentWeatherItem
+import com.example.forecastapp.domain.entity.HourlyForecastItem
 import com.example.forecastapp.presentation.ForecastApplication
 import com.example.forecastapp.presentation.state.ForecastState
 import com.example.forecastapp.presentation.viewmodel.ForecastViewModel
@@ -57,7 +58,10 @@ class MainActivity : AppCompatActivity() {
         when(state) {
             ForecastState.Initial -> {}
             ForecastState.Loading -> renderLoading()
-            is ForecastState.Success -> renderSuccess(state.currentWeatherItem)
+            is ForecastState.Success -> renderSuccess(
+                state.currentWeatherItem,
+                state.listHourlyForecastItem
+            )
             is ForecastState.Error -> renderError(state.errorMessage)
         }
     }
@@ -66,9 +70,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun renderSuccess(currentWeather: CurrentWeatherItem) {
+    private fun renderSuccess(
+        currentWeather: CurrentWeatherItem,
+        listHourlyForecastItem: List<HourlyForecastItem>
+    ) {
 
         renderCurrentWeather(currentWeather)
+        Log.i("MyLog", listHourlyForecastItem.toString())
     }
 
     private fun renderError(error: String) {
