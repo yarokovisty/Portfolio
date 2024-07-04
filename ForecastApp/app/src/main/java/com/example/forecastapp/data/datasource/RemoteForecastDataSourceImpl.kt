@@ -25,4 +25,12 @@ class RemoteForecastDataSourceImpl @Inject constructor(
         } catch (ex: Exception) {
             Result.Error(ex)
         }
+
+    override suspend fun getDailyForecast(lon: Double, lat: Double): Result<HourlyForecastDTO> =
+        try {
+            val hourlyForecastDTO = forecastService.getHourlyForecast(lat, lon)
+            Result.Success(hourlyForecastDTO)
+        } catch (ex: Exception) {
+            Result.Error(ex)
+        }
 }

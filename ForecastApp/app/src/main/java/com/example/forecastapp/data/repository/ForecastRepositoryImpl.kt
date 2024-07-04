@@ -3,6 +3,7 @@ package com.example.forecastapp.data.repository
 import com.example.forecastapp.data.datasource.RemoteForecastDataSource
 import com.example.forecastapp.data.mapper.ForecastMapper
 import com.example.forecastapp.domain.entity.CurrentWeatherItem
+import com.example.forecastapp.domain.entity.DailyForecastItem
 import com.example.forecastapp.domain.entity.HourlyForecastItem
 import com.example.forecastapp.domain.entity.Result
 import com.example.forecastapp.domain.repository.ForecastRepository
@@ -34,6 +35,24 @@ class ForecastRepositoryImpl @Inject constructor(
                     mapper.mapHourlyForecastDTOtoHourlyForecastItem(
                         result.data.list
                     )
+                )
+            }
+
+            is Result.Error -> {
+                Result.Error(result.exception)
+            }
+        }
+
+    override suspend fun getDailyForecast(
+        lon: Double,
+        lat: Double
+    ): Result<List<DailyForecastItem>> =
+        when (val result = remoteForecastDataSource.getHourlyForecast(lon, lat)) {
+            is Result.Success -> {
+                val listHourlyForecastDTO = result.data.list
+
+                Result.Success(
+                    mapper.mapHourlyForecastDTOtoDaileForecastItem(listHourlyForecastDTO)
                 )
             }
 

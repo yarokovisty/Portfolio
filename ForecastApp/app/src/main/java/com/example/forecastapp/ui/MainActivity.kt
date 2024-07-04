@@ -1,25 +1,26 @@
 package com.example.forecastapp.ui
 
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.forecastapp.R
 import com.example.forecastapp.databinding.ActivityMainBinding
 import com.example.forecastapp.domain.entity.CurrentWeatherItem
+import com.example.forecastapp.domain.entity.DailyForecastItem
 import com.example.forecastapp.domain.entity.HourlyForecastItem
 import com.example.forecastapp.presentation.ForecastApplication
 import com.example.forecastapp.presentation.state.ForecastState
 import com.example.forecastapp.presentation.viewmodel.ForecastViewModel
 import com.example.forecastapp.presentation.viewmodel.ViewModelFactory
+import com.example.forecastapp.ui.adapter.DailyForecastAdapter
 import com.example.forecastapp.util.WeatherUtils
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: DailyForecastAdapter
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         observeViewModel()
-
+        setRecyclerView()
     }
 
     override fun onStart() {
@@ -60,7 +61,8 @@ class MainActivity : AppCompatActivity() {
             ForecastState.Loading -> renderLoading()
             is ForecastState.Success -> renderSuccess(
                 state.currentWeatherItem,
-                state.listHourlyForecastItem
+                state.listHourlyForecastItem,
+                state.listDailyForecastItem
             )
             is ForecastState.Error -> renderError(state.errorMessage)
         }
@@ -72,11 +74,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun renderSuccess(
         currentWeather: CurrentWeatherItem,
-        listHourlyForecastItem: List<HourlyForecastItem>
+        listHourlyForecastItem: List<HourlyForecastItem>,
+        listDailyForecastItem: List<DailyForecastItem>
     ) {
 
         renderCurrentWeather(currentWeather)
-        Log.i("MyLog", listHourlyForecastItem.toString())
+        renderHourlyForecast(listHourlyForecastItem)
+        renderDailyForecast(listDailyForecastItem)
     }
 
     private fun renderError(error: String) {
@@ -100,6 +104,40 @@ class MainActivity : AppCompatActivity() {
         setIconCurrentWeather(currentWeather.id)
     }
 
+    private fun renderHourlyForecast(listHourlyForecastItem: List<HourlyForecastItem>) = with(binding) {
+        tvTimeHourlyForecast1.text = listHourlyForecastItem[0].time
+        tvTimeHourlyForecast2.text = listHourlyForecastItem[1].time
+        tvTimeHourlyForecast3.text = listHourlyForecastItem[2].time
+        tvTimeHourlyForecast4.text = listHourlyForecastItem[3].time
+        tvTimeHourlyForecast5.text = listHourlyForecastItem[4].time
+
+        imgTypeWeatherHourlyForecast1.setImageResource(WeatherUtils.getIconWeather(
+            listHourlyForecastItem[0].id))
+        imgTypeWeatherHourlyForecast2.setImageResource(WeatherUtils.getIconWeather(
+            listHourlyForecastItem[1].id))
+        imgTypeWeatherHourlyForecast3.setImageResource(WeatherUtils.getIconWeather(
+            listHourlyForecastItem[2].id))
+        imgTypeWeatherHourlyForecast4.setImageResource(WeatherUtils.getIconWeather(
+            listHourlyForecastItem[3].id))
+        imgTypeWeatherHourlyForecast5.setImageResource(WeatherUtils.getIconWeather(
+            listHourlyForecastItem[4].id))
+
+        tvTempHourlyForecast1.text = getString(R.string.template_temperature,
+            listHourlyForecastItem[0].temp.toString())
+        tvTempHourlyForecast2.text = getString(R.string.template_temperature,
+            listHourlyForecastItem[1].temp.toString())
+        tvTempHourlyForecast3.text = getString(R.string.template_temperature,
+            listHourlyForecastItem[2].temp.toString())
+        tvTempHourlyForecast4.text = getString(R.string.template_temperature,
+            listHourlyForecastItem[3].temp.toString())
+        tvTempHourlyForecast5.text = getString(R.string.template_temperature,
+            listHourlyForecastItem[4].temp.toString())
+    }
+
+    private fun renderDailyForecast(listDailyForecastItem: List<DailyForecastItem>) {
+        adapter.listDailyForecast = listDailyForecastItem
+    }
+
     private fun setPrimaryBackgroundColor(primaryBackgroundColor: Int) {
         binding.layoutMain.setBackgroundColor(
             ContextCompat.getColor(this, primaryBackgroundColor)
@@ -111,9 +149,22 @@ class MainActivity : AppCompatActivity() {
         binding.cardViewCurrentWeather.setCardBackgroundColor(
             ContextCompat.getColor(this, secondaryBackgroundColor)
         )
+        binding.cardViewHourlyForecast.setCardBackgroundColor(
+            ContextCompat.getColor(this, secondaryBackgroundColor)
+        )
+        binding.cardViewDailyForecast.setCardBackgroundColor(
+            ContextCompat.getColor(this, secondaryBackgroundColor)
+        )
     }
 
     private fun setIconCurrentWeather(idCurrentWeather: Int) {
         binding.imgCurrentWeather.setImageResource(WeatherUtils.getIconWeather(idCurrentWeather))
     }
+
+    private fun setRecyclerView() {
+        adapter = DailyForecastAdapter()
+        binding.rvDailyForecast.adapter = adapter
+    }
+
+
 }

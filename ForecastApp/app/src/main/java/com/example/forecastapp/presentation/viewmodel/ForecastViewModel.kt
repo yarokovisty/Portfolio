@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.forecastapp.domain.entity.Result
 import com.example.forecastapp.domain.usecase.GetCurrentWeatherUseCase
+import com.example.forecastapp.domain.usecase.GetDailyForecastUseCase
 import com.example.forecastapp.domain.usecase.GetHourlyForecastUseCase
 import com.example.forecastapp.presentation.state.ForecastState
 import kotlinx.coroutines.async
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 class ForecastViewModel @Inject constructor(
     private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase,
-    private val getHourlyForecastUseCase: GetHourlyForecastUseCase
+    private val getHourlyForecastUseCase: GetHourlyForecastUseCase,
+    private val getDailyForecastUseCase: GetDailyForecastUseCase
 ) : ViewModel() {
 
     private val _forecastState = MutableLiveData<ForecastState>()
@@ -31,17 +33,21 @@ class ForecastViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentWeatherItemDeferred = async { getCurrentWeather(lon, lat) }
-            val listHourlyForecastDeferred = async { getHourlyForecastUseCase(lon, lat) }
+            val listHourlyForecastDeferred = async { getHourlyForecast(lon, lat) }
+            val listDailyForecastDeferred = async { getDailyForecast(lon, lat) }
 
             val resultCurrentWeatherItem = currentWeatherItemDeferred.await()
             val resultListHourlyForecastItem = listHourlyForecastDeferred.await()
+            val resultListDailyForecastItem = listDailyForecastDeferred.await()
 
             when {
                 resultCurrentWeatherItem is Result.Success
-                        && resultListHourlyForecastItem is Result.Success -> {
+                        && resultListHourlyForecastItem is Result.Success
+                        && resultListDailyForecastItem is Result.Success -> {
                     _forecastState.value = ForecastState.Success(
                         resultCurrentWeatherItem.data,
-                        resultListHourlyForecastItem.data
+                        resultListHourlyForecastItem.data,
+                        resultListDailyForecastItem.data
                     )
                 }
 
@@ -60,6 +66,10 @@ class ForecastViewModel @Inject constructor(
 
     private suspend fun getHourlyForecast(lon: Double, lat: Double) = with(Dispatchers.IO) {
         getHourlyForecastUseCase(lon, lat)
+    }
+
+    private suspend fun getDailyForecast(lon: Double, lat: Double) = with(Dispatchers.IO) {
+        getDailyForecastUseCase(lon, lat)
     }
 
 }

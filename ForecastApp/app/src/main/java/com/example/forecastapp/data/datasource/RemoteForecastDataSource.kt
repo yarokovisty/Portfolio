@@ -9,4 +9,6 @@ interface RemoteForecastDataSource {
     suspend fun getCurrentWeather(lon: Double, lat: Double): Result<CurrentWeatherDTO>
 
     suspend fun getHourlyForecast(lon: Double, lat: Double): Result<HourlyForecastDTO>
+
+    suspend fun getDailyForecast(lon: Double, lat: Double): Result<HourlyForecastDTO>
 }

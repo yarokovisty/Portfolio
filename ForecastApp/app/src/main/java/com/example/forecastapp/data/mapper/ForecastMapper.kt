@@ -4,8 +4,10 @@ import com.example.forecastapp.data.network.dto.currentweatherdto.CurrentWeather
 import com.example.forecastapp.data.network.dto.hourlyforecastdto.HourlyForecastDTO
 import com.example.forecastapp.data.network.dto.hourlyforecastdto.WeatherData
 import com.example.forecastapp.domain.entity.CurrentWeatherItem
+import com.example.forecastapp.domain.entity.DailyForecastItem
 import com.example.forecastapp.domain.entity.HourlyForecastItem
-import com.example.forecastapp.util.formatUnixTime
+import com.example.forecastapp.util.formatIsoDate
+import com.example.forecastapp.util.formatUnixTimeHHMM
 import javax.inject.Inject
 
 class ForecastMapper @Inject constructor() {
@@ -28,10 +30,28 @@ class ForecastMapper @Inject constructor() {
         listWeatherData.map {  weatherData ->
             HourlyForecastItem(
                 id = weatherData.weather[0].id,
-                time = formatUnixTime(weatherData.dt),
+                time = formatUnixTimeHHMM(weatherData.dt),
                 temp = weatherData.main.temp.toInt()
             )
         }
+
+    fun mapHourlyForecastDTOtoDaileForecastItem(
+        listWeatherData: List<WeatherData>
+    ): List<DailyForecastItem> =
+        listWeatherData.map { weatherData ->
+            DailyForecastItem(
+                id = weatherData.weather[0].id,
+                date = formatIsoDate(weatherData.dt),
+                temp = weatherData.main.temp.toInt()
+            )
+        }.groupBy { it.date }.map { (date, items) ->
+            DailyForecastItem(
+                items[0].id,
+                date,
+                items.map { it.temp }.average().toInt()
+            )
+        }
+
 
     companion object {
         private const val KM = 1000.0
