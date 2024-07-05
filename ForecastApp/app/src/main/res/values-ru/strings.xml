@@ -5,7 +5,7 @@
     <string name="title_current_weather_humidity">Влажность</string>
     <string name="title_current_weather_visibility">Видимость</string>
     <string name="template_wind">%s км/ч</string>
-    <string name="template_visibility">%s м</string>
+    <string name="template_visibility">%s км</string>
     <string name="title_hourly_forecast">Почасовой прогноз</string>
     <string name="title_daily_forecast">Еждневный прогноз</string>
 </resources>

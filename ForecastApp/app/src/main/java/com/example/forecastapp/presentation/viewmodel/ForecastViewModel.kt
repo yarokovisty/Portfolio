@@ -24,6 +24,9 @@ class ForecastViewModel @Inject constructor(
     val forecastState: LiveData<ForecastState>
         get() = _forecastState
 
+    var isReady: Boolean = false
+        private set
+
     init {
         _forecastState.value = ForecastState.Initial
     }
@@ -49,6 +52,7 @@ class ForecastViewModel @Inject constructor(
                         resultListHourlyForecastItem.data,
                         resultListDailyForecastItem.data
                     )
+                    isReady = true
                 }
 
                 resultCurrentWeatherItem is Result.Error

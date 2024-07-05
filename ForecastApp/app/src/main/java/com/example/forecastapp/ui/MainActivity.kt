@@ -2,6 +2,8 @@ package com.example.forecastapp.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         observeViewModel()
         setRecyclerView()
+        setSplashScreen()
     }
 
     override fun onStart() {
@@ -166,5 +169,21 @@ class MainActivity : AppCompatActivity() {
         binding.rvDailyForecast.adapter = adapter
     }
 
+    private fun setSplashScreen() {
+        val content: View = findViewById(android.R.id.content)
+        content.viewTreeObserver.addOnPreDrawListener(
+            object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    return if (viewModel.isReady) {
+                        content.viewTreeObserver.removeOnPreDrawListener(this)
+                        true
+                    } else {
+                        false
+                    }
+                }
+
+            }
+        )
+    }
 
 }
