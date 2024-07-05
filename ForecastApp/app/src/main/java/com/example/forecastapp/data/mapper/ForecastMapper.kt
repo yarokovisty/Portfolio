@@ -1,5 +1,6 @@
 package com.example.forecastapp.data.mapper
 
+import com.example.forecastapp.data.database.model.HourlyForecastDbModel
 import com.example.forecastapp.data.network.dto.currentweatherdto.CurrentWeatherDTO
 import com.example.forecastapp.data.network.dto.hourlyforecastdto.HourlyForecastDTO
 import com.example.forecastapp.data.network.dto.hourlyforecastdto.WeatherData
@@ -51,6 +52,24 @@ class ForecastMapper @Inject constructor() {
                 items.map { it.temp }.average().toInt()
             )
         }
+
+    fun mapHourlyForecastDbModelToHourlyForecastItem(
+        hourlyForecastDbModel: HourlyForecastDbModel
+    ): HourlyForecastItem =
+        HourlyForecastItem(
+            id = hourlyForecastDbModel.id,
+            time = hourlyForecastDbModel.time,
+            temp = hourlyForecastDbModel.temp
+        )
+
+    fun mapHourlyForecastItemToHourlyForecastDbModel(
+        hourlyForecastItem: HourlyForecastItem
+    ): HourlyForecastDbModel =
+        HourlyForecastDbModel(
+            id = hourlyForecastItem.id,
+            time = hourlyForecastItem.time,
+            temp = hourlyForecastItem.temp
+        )
 
 
     companion object {

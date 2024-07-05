@@ -13,7 +13,13 @@ interface ForecastRepository {
 
     suspend fun getCurrentWeather(lon: Double, lat: Double): Result<CurrentWeatherItem>
 
+    suspend fun saveHourlyForecast(listHourlyForecastItem: List<HourlyForecastItem>)
+
+    suspend fun getHourlyForecast(): List<HourlyForecastItem>
+
     suspend fun getHourlyForecast(lon: Double, lat: Double): Result<List<HourlyForecastItem>>
+
+    suspend fun clearHourlyForecast()
 
     suspend fun getDailyForecast(lon: Double, lat: Double): Result<List<DailyForecastItem>>
 }

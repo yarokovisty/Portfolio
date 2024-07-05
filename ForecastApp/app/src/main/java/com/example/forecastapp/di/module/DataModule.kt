@@ -1,6 +1,8 @@
 package com.example.forecastapp.di.module
 
 import android.app.Application
+import com.example.forecastapp.data.database.AppDatabase
+import com.example.forecastapp.data.database.ForecastDao
 import com.example.forecastapp.data.datasource.LocalForecastDataSource
 import com.example.forecastapp.data.datasource.LocalForecastDataSourceImpl
 import com.example.forecastapp.data.datasource.RemoteForecastDataSource
@@ -32,9 +34,17 @@ interface DataModule {
         ): SharedPreferencesHelper {
             return SharedPreferencesHelper(application)
         }
-
         @Provides
         fun provideForecastService(): ForecastService =
             ServiceFactory.forecastService
+
+        @AppScope
+        @Provides
+        fun provideForecastDao(
+            application: Application
+        ): ForecastDao {
+            return AppDatabase.getInstance(application).forecastDao()
+        }
+
     }
 }

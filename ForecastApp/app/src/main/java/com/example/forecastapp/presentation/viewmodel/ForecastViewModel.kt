@@ -6,11 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.forecastapp.domain.entity.CurrentWeatherItem
+import com.example.forecastapp.domain.entity.HourlyForecastItem
 import com.example.forecastapp.domain.entity.Result
+import com.example.forecastapp.domain.usecase.ClearHourlyForecastUseCase
 import com.example.forecastapp.domain.usecase.GetCurrentWeatherUseCase
 import com.example.forecastapp.domain.usecase.GetDailyForecastUseCase
 import com.example.forecastapp.domain.usecase.GetHourlyForecastUseCase
 import com.example.forecastapp.domain.usecase.SaveCurrentWeatherUseCase
+import com.example.forecastapp.domain.usecase.SaveHourlyForecastUseCase
 import com.example.forecastapp.presentation.state.ForecastState
 import kotlinx.coroutines.async
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +23,9 @@ import javax.inject.Inject
 class ForecastViewModel @Inject constructor(
     private val saveCurrentWeatherUseCase: SaveCurrentWeatherUseCase,
     private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase,
+    private val saveHourlyForecastUseCase: SaveHourlyForecastUseCase,
     private val getHourlyForecastUseCase: GetHourlyForecastUseCase,
+    private val clearHourlyForecastUseCase: ClearHourlyForecastUseCase,
     private val getDailyForecastUseCase: GetDailyForecastUseCase
 ) : ViewModel() {
 
@@ -58,7 +63,10 @@ class ForecastViewModel @Inject constructor(
                     )
                     isReady = true
 
-                    saveLocal(resultCurrentWeatherItem.data)
+                    saveLocal(
+                        resultCurrentWeatherItem.data,
+                        resultListHourlyForecastItem.data
+                    )
                 }
 
                 resultCurrentWeatherItem is Result.Error
@@ -73,19 +81,30 @@ class ForecastViewModel @Inject constructor(
     fun loadDataFromDb() {
         _forecastState.value = ForecastState.Loading
 
-        val currentWeatherItem = getCurrentWeatherUseCase()
+        viewModelScope.launch {
+            val currentWeatherItem = getCurrentWeatherUseCase()
+            val hourlyForecast = getHourlyForecastUseCase()
 
-        if (currentWeatherItem != null) {
-            Log.i("MyLog", currentWeatherItem.toString())
-        } else {
-            _forecastState.value = ForecastState.Error("Error")
+            if (currentWeatherItem != null) {
+                Log.i("MyLog", currentWeatherItem.toString())
+                Log.i("MyLog", hourlyForecast.toString())
+            } else {
+                _forecastState.value = ForecastState.Error("Error")
+            }
         }
+
     }
 
     private fun saveLocal(
-        currentWeatherItem: CurrentWeatherItem
+        currentWeatherItem: CurrentWeatherItem,
+        hourlyForecast: List<HourlyForecastItem>
     ) {
-        saveCurrentWeatherUseCase(currentWeatherItem)
+        viewModelScope.launch {
+            saveCurrentWeatherUseCase(currentWeatherItem)
+            clearHourlyForecastUseCase()
+            saveHourlyForecastUseCase(hourlyForecast)
+        }
+
     }
 
     private suspend fun getCurrentWeather(lon: Double, lat: Double) = with(Dispatchers.IO) {

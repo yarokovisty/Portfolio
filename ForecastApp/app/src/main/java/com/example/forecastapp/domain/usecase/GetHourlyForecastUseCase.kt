@@ -9,6 +9,9 @@ class GetHourlyForecastUseCase @Inject constructor(
     private val repository: ForecastRepository
 ) {
 
+    suspend operator fun invoke(): List<HourlyForecastItem> =
+        repository.getHourlyForecast()
+
     suspend operator fun invoke(lon: Double, lat: Double): Result<List<HourlyForecastItem>> =
         repository.getHourlyForecast(lon, lat)
 }

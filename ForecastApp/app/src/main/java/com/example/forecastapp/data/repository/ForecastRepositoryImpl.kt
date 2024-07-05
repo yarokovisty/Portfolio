@@ -34,6 +34,17 @@ class ForecastRepositoryImpl @Inject constructor(
             }
         }
 
+    override suspend fun saveHourlyForecast(listHourlyForecastItem: List<HourlyForecastItem>) {
+        localForecastDataSource.saveHourlyForecast(listHourlyForecastItem.map { item ->
+            mapper.mapHourlyForecastItemToHourlyForecastDbModel(item)
+        })
+    }
+
+    override suspend fun getHourlyForecast(): List<HourlyForecastItem> =
+        localForecastDataSource.getHourlyForecast().map { dbModel ->
+            mapper.mapHourlyForecastDbModelToHourlyForecastItem(dbModel)
+        }
+
     override suspend fun getHourlyForecast(
         lon: Double,
         lat: Double
@@ -51,6 +62,10 @@ class ForecastRepositoryImpl @Inject constructor(
                 Result.Error(result.exception)
             }
         }
+
+    override suspend fun clearHourlyForecast() {
+        localForecastDataSource.clearHourlyForecast()
+    }
 
     override suspend fun getDailyForecast(
         lon: Double,
