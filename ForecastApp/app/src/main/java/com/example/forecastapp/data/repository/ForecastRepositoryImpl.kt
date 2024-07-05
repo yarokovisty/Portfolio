@@ -1,5 +1,6 @@
 package com.example.forecastapp.data.repository
 
+import com.example.forecastapp.data.datasource.LocalForecastDataSource
 import com.example.forecastapp.data.datasource.RemoteForecastDataSource
 import com.example.forecastapp.data.mapper.ForecastMapper
 import com.example.forecastapp.domain.entity.CurrentWeatherItem
@@ -10,9 +11,17 @@ import com.example.forecastapp.domain.repository.ForecastRepository
 import javax.inject.Inject
 
 class ForecastRepositoryImpl @Inject constructor(
+    private val localForecastDataSource: LocalForecastDataSource,
     private val remoteForecastDataSource: RemoteForecastDataSource,
     private val mapper: ForecastMapper
 ) : ForecastRepository {
+
+    override fun saveCurrentWeather(currentWeatherItem: CurrentWeatherItem) {
+        localForecastDataSource.saveCurrentWeather(currentWeatherItem)
+    }
+
+    override fun getCurrentWeather(): CurrentWeatherItem? =
+        localForecastDataSource.getCurrentWeather()
 
     override suspend fun getCurrentWeather(lon: Double, lat: Double): Result<CurrentWeatherItem> =
         when (val result = remoteForecastDataSource.getCurrentWeather(lon, lat)) {

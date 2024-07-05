@@ -1,13 +1,16 @@
 package com.example.forecastapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.forecastapp.domain.entity.CurrentWeatherItem
 import com.example.forecastapp.domain.entity.Result
 import com.example.forecastapp.domain.usecase.GetCurrentWeatherUseCase
 import com.example.forecastapp.domain.usecase.GetDailyForecastUseCase
 import com.example.forecastapp.domain.usecase.GetHourlyForecastUseCase
+import com.example.forecastapp.domain.usecase.SaveCurrentWeatherUseCase
 import com.example.forecastapp.presentation.state.ForecastState
 import kotlinx.coroutines.async
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ForecastViewModel @Inject constructor(
+    private val saveCurrentWeatherUseCase: SaveCurrentWeatherUseCase,
     private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase,
     private val getHourlyForecastUseCase: GetHourlyForecastUseCase,
     private val getDailyForecastUseCase: GetDailyForecastUseCase
@@ -31,7 +35,7 @@ class ForecastViewModel @Inject constructor(
         _forecastState.value = ForecastState.Initial
     }
 
-    fun loadData(lon: Double, lat: Double) {
+    fun loadDataFromNetwork(lon: Double, lat: Double) {
         _forecastState.value = ForecastState.Loading
 
         viewModelScope.launch {
@@ -53,6 +57,8 @@ class ForecastViewModel @Inject constructor(
                         resultListDailyForecastItem.data
                     )
                     isReady = true
+
+                    saveLocal(resultCurrentWeatherItem.data)
                 }
 
                 resultCurrentWeatherItem is Result.Error
@@ -62,6 +68,24 @@ class ForecastViewModel @Inject constructor(
             }
         }
 
+    }
+
+    fun loadDataFromDb() {
+        _forecastState.value = ForecastState.Loading
+
+        val currentWeatherItem = getCurrentWeatherUseCase()
+
+        if (currentWeatherItem != null) {
+            Log.i("MyLog", currentWeatherItem.toString())
+        } else {
+            _forecastState.value = ForecastState.Error("Error")
+        }
+    }
+
+    private fun saveLocal(
+        currentWeatherItem: CurrentWeatherItem
+    ) {
+        saveCurrentWeatherUseCase(currentWeatherItem)
     }
 
     private suspend fun getCurrentWeather(lon: Double, lat: Double) = with(Dispatchers.IO) {
