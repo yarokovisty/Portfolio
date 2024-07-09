@@ -1,6 +1,8 @@
 package com.example.forecastapp.data.datasource
 
+import android.util.Log
 import com.example.forecastapp.data.database.ForecastDao
+import com.example.forecastapp.data.database.model.DailyForecastDbModel
 import com.example.forecastapp.data.database.model.HourlyForecastDbModel
 import com.example.forecastapp.data.sharedpreferences.SharedPreferencesHelper
 import com.example.forecastapp.domain.entity.CurrentWeatherItem
@@ -28,6 +30,17 @@ class LocalForecastDataSourceImpl @Inject constructor(
 
     override suspend fun clearHourlyForecast() {
         forecastDao.clearHourlyForecast()
+    }
+
+    override suspend fun saveDailyForecast(listDailyForecastDbModel: List<DailyForecastDbModel>) {
+        forecastDao.saveDailyForecast(listDailyForecastDbModel)
+    }
+
+    override suspend fun getDailyForecast(): List<DailyForecastDbModel> =
+        forecastDao.getDailyForecast()
+
+    override suspend fun clearDailyForecast() {
+        forecastDao.clearDailyForecast()
     }
 
 }

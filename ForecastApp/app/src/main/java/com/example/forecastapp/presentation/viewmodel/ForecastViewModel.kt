@@ -1,18 +1,20 @@
 package com.example.forecastapp.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.forecastapp.domain.entity.CurrentWeatherItem
+import com.example.forecastapp.domain.entity.DailyForecastItem
 import com.example.forecastapp.domain.entity.HourlyForecastItem
 import com.example.forecastapp.domain.entity.Result
+import com.example.forecastapp.domain.usecase.ClearDailyForecastUseCase
 import com.example.forecastapp.domain.usecase.ClearHourlyForecastUseCase
 import com.example.forecastapp.domain.usecase.GetCurrentWeatherUseCase
 import com.example.forecastapp.domain.usecase.GetDailyForecastUseCase
 import com.example.forecastapp.domain.usecase.GetHourlyForecastUseCase
 import com.example.forecastapp.domain.usecase.SaveCurrentWeatherUseCase
+import com.example.forecastapp.domain.usecase.SaveDailyForecastUseCase
 import com.example.forecastapp.domain.usecase.SaveHourlyForecastUseCase
 import com.example.forecastapp.presentation.state.ForecastState
 import kotlinx.coroutines.async
@@ -26,7 +28,9 @@ class ForecastViewModel @Inject constructor(
     private val saveHourlyForecastUseCase: SaveHourlyForecastUseCase,
     private val getHourlyForecastUseCase: GetHourlyForecastUseCase,
     private val clearHourlyForecastUseCase: ClearHourlyForecastUseCase,
-    private val getDailyForecastUseCase: GetDailyForecastUseCase
+    private val getDailyForecastUseCase: GetDailyForecastUseCase,
+    private val clearDailyForecastUseCase: ClearDailyForecastUseCase,
+    private val saveDailyForecastUseCase: SaveDailyForecastUseCase
 ) : ViewModel() {
 
     private val _forecastState = MutableLiveData<ForecastState>()
@@ -65,13 +69,15 @@ class ForecastViewModel @Inject constructor(
 
                     saveLocal(
                         resultCurrentWeatherItem.data,
-                        resultListHourlyForecastItem.data
+                        resultListHourlyForecastItem.data,
+                        resultListDailyForecastItem.data
                     )
                 }
 
                 resultCurrentWeatherItem is Result.Error
                         || resultListHourlyForecastItem is Result.Error -> {
                     _forecastState.value = ForecastState.Error("Error")
+                    isReady = true
                 }
             }
         }
@@ -82,27 +88,46 @@ class ForecastViewModel @Inject constructor(
         _forecastState.value = ForecastState.Loading
 
         viewModelScope.launch {
-            val currentWeatherItem = getCurrentWeatherUseCase()
-            val hourlyForecast = getHourlyForecastUseCase()
+            try {
+                val currentWeatherItem = getCurrentWeatherUseCase()
+                val hourlyForecast = getHourlyForecastUseCase()
+                val dailyForecast = getDailyForecastUseCase()
 
-            if (currentWeatherItem != null) {
-                Log.i("MyLog", currentWeatherItem.toString())
-                Log.i("MyLog", hourlyForecast.toString())
-            } else {
+                if (currentWeatherItem != null) {
+                    _forecastState.value = ForecastState.Success(
+                        currentWeatherItem,
+                        hourlyForecast,
+                        dailyForecast
+                    )
+                } else {
+                    _forecastState.value = ForecastState.Error("Error")
+                }
+
+                isReady = true
+
+            } catch (ex: Exception) {
                 _forecastState.value = ForecastState.Error("Error")
+                isReady = true
             }
+
+
+
+
         }
 
     }
 
     private fun saveLocal(
         currentWeatherItem: CurrentWeatherItem,
-        hourlyForecast: List<HourlyForecastItem>
+        hourlyForecast: List<HourlyForecastItem>,
+        dailyForecast: List<DailyForecastItem>
     ) {
         viewModelScope.launch {
             saveCurrentWeatherUseCase(currentWeatherItem)
             clearHourlyForecastUseCase()
             saveHourlyForecastUseCase(hourlyForecast)
+            clearDailyForecastUseCase()
+            saveDailyForecastUseCase(dailyForecast)
         }
 
     }

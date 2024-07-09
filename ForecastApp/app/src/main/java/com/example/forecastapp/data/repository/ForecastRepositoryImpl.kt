@@ -85,5 +85,20 @@ class ForecastRepositoryImpl @Inject constructor(
             }
         }
 
+    override suspend fun getDailyForecast(): List<DailyForecastItem> =
+        localForecastDataSource.getDailyForecast().map {
+            mapper.mapDailyForecastDbModelToDailyForecastItem(it)
+        }
+
+    override suspend fun saveDailyForecast(listDailyForecastItem: List<DailyForecastItem>) {
+        localForecastDataSource.saveDailyForecast(listDailyForecastItem.map {
+            mapper.mapDailyForecastItemToDailyForecastDbModel(it)
+        })
+    }
+
+    override suspend fun clearDailyForecast() {
+        localForecastDataSource.clearDailyForecast()
+    }
+
 
 }

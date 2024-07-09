@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.forecastapp.data.database.model.DailyForecastDbModel
 import com.example.forecastapp.data.database.model.HourlyForecastDbModel
 import com.example.forecastapp.domain.entity.HourlyForecastItem
 
@@ -20,5 +21,14 @@ interface ForecastDao {
 
     @Query("DELETE FROM hourly_forecast")
     suspend fun clearHourlyForecast()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveDailyForecast(listDailyForecastDbModel: List<DailyForecastDbModel>)
+
+    @Query("SELECT * FROM daily_forecast")
+    suspend fun getDailyForecast(): List<DailyForecastDbModel>
+
+    @Query("DELETE FROM daily_forecast")
+    suspend fun clearDailyForecast()
 
 }

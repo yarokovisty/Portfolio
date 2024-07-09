@@ -1,5 +1,6 @@
 package com.example.forecastapp.domain.repository
 
+import com.example.forecastapp.data.database.model.DailyForecastDbModel
 import com.example.forecastapp.domain.entity.CurrentWeatherItem
 import com.example.forecastapp.domain.entity.DailyForecastItem
 import com.example.forecastapp.domain.entity.HourlyForecastItem
@@ -22,4 +23,10 @@ interface ForecastRepository {
     suspend fun clearHourlyForecast()
 
     suspend fun getDailyForecast(lon: Double, lat: Double): Result<List<DailyForecastItem>>
+
+    suspend fun getDailyForecast(): List<DailyForecastItem>
+
+    suspend fun saveDailyForecast(listDailyForecastItem: List<DailyForecastItem>)
+
+    suspend fun clearDailyForecast()
 }

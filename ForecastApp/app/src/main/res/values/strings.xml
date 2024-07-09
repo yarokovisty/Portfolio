@@ -12,4 +12,7 @@
     <string name="title_hourly_forecast">Hourly Forecast</string>
     <string name="title_daily_forecast">Daily Forecast</string>
 
+    <string name="error_location_null">Restart geolocation</string>
+    <string name="error_reject_permission">Give permission</string>
+
 </resources>

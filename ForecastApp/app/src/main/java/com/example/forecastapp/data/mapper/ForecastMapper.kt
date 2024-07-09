@@ -1,5 +1,6 @@
 package com.example.forecastapp.data.mapper
 
+import com.example.forecastapp.data.database.model.DailyForecastDbModel
 import com.example.forecastapp.data.database.model.HourlyForecastDbModel
 import com.example.forecastapp.data.network.dto.currentweatherdto.CurrentWeatherDTO
 import com.example.forecastapp.data.network.dto.hourlyforecastdto.HourlyForecastDTO
@@ -69,6 +70,24 @@ class ForecastMapper @Inject constructor() {
             id = hourlyForecastItem.id,
             time = hourlyForecastItem.time,
             temp = hourlyForecastItem.temp
+        )
+
+    fun mapDailyForecastItemToDailyForecastDbModel(
+        dailyForecastItem: DailyForecastItem
+    ): DailyForecastDbModel =
+        DailyForecastDbModel(
+            id = dailyForecastItem.id,
+            date = dailyForecastItem.date,
+            temp = dailyForecastItem.temp
+        )
+
+    fun mapDailyForecastDbModelToDailyForecastItem(
+        dailyForecastDbModel: DailyForecastDbModel
+    ): DailyForecastItem =
+        DailyForecastItem(
+            id = dailyForecastDbModel.id,
+            date = dailyForecastDbModel.date,
+            temp = dailyForecastDbModel.temp
         )
 
 

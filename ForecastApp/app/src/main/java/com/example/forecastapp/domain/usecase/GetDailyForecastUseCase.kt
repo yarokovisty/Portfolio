@@ -11,4 +11,7 @@ class GetDailyForecastUseCase @Inject constructor(
 
     suspend operator fun invoke(lon: Double, lat: Double): Result<List<DailyForecastItem>> =
         repository.getDailyForecast(lon, lat)
+
+    suspend operator fun invoke(): List<DailyForecastItem> =
+        repository.getDailyForecast()
 }

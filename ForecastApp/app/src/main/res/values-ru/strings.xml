@@ -8,4 +8,6 @@
     <string name="template_visibility">%s км</string>
     <string name="title_hourly_forecast">Почасовой прогноз</string>
     <string name="title_daily_forecast">Еждневный прогноз</string>
+    <string name="error_location_null">Перезапустите геолокацию</string>
+    <string name="error_reject_permission">Дайте разрешение</string>
 </resources>

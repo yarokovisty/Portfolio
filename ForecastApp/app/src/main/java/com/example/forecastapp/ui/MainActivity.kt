@@ -1,14 +1,20 @@
 package com.example.forecastapp.ui
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.forecastapp.R
@@ -22,11 +28,16 @@ import com.example.forecastapp.presentation.viewmodel.ForecastViewModel
 import com.example.forecastapp.presentation.viewmodel.ViewModelFactory
 import com.example.forecastapp.ui.adapter.DailyForecastAdapter
 import com.example.forecastapp.util.WeatherUtils
+import com.example.forecastapp.util.showShortToast
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: DailyForecastAdapter
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -45,21 +56,26 @@ class MainActivity : AppCompatActivity() {
         observeViewModel()
         setRecyclerView()
         setSplashScreen()
+        setLocation()
     }
 
     override fun onStart() {
         super.onStart()
 
-        if (isOnline(this)) {
-            viewModel.loadDataFromNetwork(83.7636, 53.3606)
-        } else {
-            viewModel.loadDataFromDb()
-        }
+        loadData()
     }
 
     private fun initComponent() {
         val component = (applicationContext as ForecastApplication).appComponent
         component.inject(this)
+    }
+
+    private fun loadData() {
+        if (isOnline(this)) {
+            getCurrentLocation()
+        } else {
+            viewModel.loadDataFromDb()
+        }
     }
 
     private fun observeViewModel() {
@@ -68,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun renderState(state: ForecastState) {
 
-        when(state) {
+        when (state) {
             ForecastState.Initial -> {}
             ForecastState.Loading -> renderLoading()
             is ForecastState.Success -> renderSuccess(
@@ -76,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                 state.listHourlyForecastItem,
                 state.listDailyForecastItem
             )
+
             is ForecastState.Error -> renderError(state.errorMessage)
         }
     }
@@ -96,14 +113,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun renderError(error: String) {
-
+        showShortToast(this, error)
     }
 
     private fun renderCurrentWeather(currentWeather: CurrentWeatherItem) = with(binding) {
-        tvTempCurrentWeather.text = getString(R.string.template_temperature, currentWeather.temp.toString())
+        tvTempCurrentWeather.text =
+            getString(R.string.template_temperature, currentWeather.temp.toString())
         tvDescriptionCurrentWeather.text = currentWeather.description
         tvWindValue.text = getString(R.string.template_wind, currentWeather.wind.toString())
-        tvHumidityValue.text = getString(R.string.template_humidity, currentWeather.humidity.toString())
+        tvHumidityValue.text =
+            getString(R.string.template_humidity, currentWeather.humidity.toString())
         tvVisibilityValue.text = getString(
             R.string.template_visibility, currentWeather.visibility.toString()
         )
@@ -116,35 +135,61 @@ class MainActivity : AppCompatActivity() {
         setIconCurrentWeather(currentWeather.id)
     }
 
-    private fun renderHourlyForecast(listHourlyForecastItem: List<HourlyForecastItem>) = with(binding) {
-        tvTimeHourlyForecast1.text = listHourlyForecastItem[0].time
-        tvTimeHourlyForecast2.text = listHourlyForecastItem[1].time
-        tvTimeHourlyForecast3.text = listHourlyForecastItem[2].time
-        tvTimeHourlyForecast4.text = listHourlyForecastItem[3].time
-        tvTimeHourlyForecast5.text = listHourlyForecastItem[4].time
+    private fun renderHourlyForecast(listHourlyForecastItem: List<HourlyForecastItem>) =
+        with(binding) {
+            tvTimeHourlyForecast1.text = listHourlyForecastItem[0].time
+            tvTimeHourlyForecast2.text = listHourlyForecastItem[1].time
+            tvTimeHourlyForecast3.text = listHourlyForecastItem[2].time
+            tvTimeHourlyForecast4.text = listHourlyForecastItem[3].time
+            tvTimeHourlyForecast5.text = listHourlyForecastItem[4].time
 
-        imgTypeWeatherHourlyForecast1.setImageResource(WeatherUtils.getIconWeather(
-            listHourlyForecastItem[0].id))
-        imgTypeWeatherHourlyForecast2.setImageResource(WeatherUtils.getIconWeather(
-            listHourlyForecastItem[1].id))
-        imgTypeWeatherHourlyForecast3.setImageResource(WeatherUtils.getIconWeather(
-            listHourlyForecastItem[2].id))
-        imgTypeWeatherHourlyForecast4.setImageResource(WeatherUtils.getIconWeather(
-            listHourlyForecastItem[3].id))
-        imgTypeWeatherHourlyForecast5.setImageResource(WeatherUtils.getIconWeather(
-            listHourlyForecastItem[4].id))
+            imgTypeWeatherHourlyForecast1.setImageResource(
+                WeatherUtils.getIconWeather(
+                    listHourlyForecastItem[0].id
+                )
+            )
+            imgTypeWeatherHourlyForecast2.setImageResource(
+                WeatherUtils.getIconWeather(
+                    listHourlyForecastItem[1].id
+                )
+            )
+            imgTypeWeatherHourlyForecast3.setImageResource(
+                WeatherUtils.getIconWeather(
+                    listHourlyForecastItem[2].id
+                )
+            )
+            imgTypeWeatherHourlyForecast4.setImageResource(
+                WeatherUtils.getIconWeather(
+                    listHourlyForecastItem[3].id
+                )
+            )
+            imgTypeWeatherHourlyForecast5.setImageResource(
+                WeatherUtils.getIconWeather(
+                    listHourlyForecastItem[4].id
+                )
+            )
 
-        tvTempHourlyForecast1.text = getString(R.string.template_temperature,
-            listHourlyForecastItem[0].temp.toString())
-        tvTempHourlyForecast2.text = getString(R.string.template_temperature,
-            listHourlyForecastItem[1].temp.toString())
-        tvTempHourlyForecast3.text = getString(R.string.template_temperature,
-            listHourlyForecastItem[2].temp.toString())
-        tvTempHourlyForecast4.text = getString(R.string.template_temperature,
-            listHourlyForecastItem[3].temp.toString())
-        tvTempHourlyForecast5.text = getString(R.string.template_temperature,
-            listHourlyForecastItem[4].temp.toString())
-    }
+            tvTempHourlyForecast1.text = getString(
+                R.string.template_temperature,
+                listHourlyForecastItem[0].temp.toString()
+            )
+            tvTempHourlyForecast2.text = getString(
+                R.string.template_temperature,
+                listHourlyForecastItem[1].temp.toString()
+            )
+            tvTempHourlyForecast3.text = getString(
+                R.string.template_temperature,
+                listHourlyForecastItem[2].temp.toString()
+            )
+            tvTempHourlyForecast4.text = getString(
+                R.string.template_temperature,
+                listHourlyForecastItem[3].temp.toString()
+            )
+            tvTempHourlyForecast5.text = getString(
+                R.string.template_temperature,
+                listHourlyForecastItem[4].temp.toString()
+            )
+        }
 
     private fun renderDailyForecast(listDailyForecastItem: List<DailyForecastItem>) {
         adapter.listDailyForecast = listDailyForecastItem
@@ -195,8 +240,9 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    fun isOnline(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return false
         val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
         return when {
@@ -205,6 +251,79 @@ class MainActivity : AppCompatActivity() {
             activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
             else -> false
         }
+    }
+
+    private fun setLocation() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+    }
+
+    private fun getCurrentLocation() {
+        if (checkPermission()) {
+
+            if (isLocationEnabled()) {
+                fusedLocationClient.lastLocation.addOnCompleteListener { task ->
+                    val location = task.result
+
+                    if (location == null) {
+                        showShortToast(this, getString(R.string.error_location_null))
+                    } else {
+                        viewModel.loadDataFromNetwork(location.longitude, location.latitude)
+                    }
+                }
+            } else {
+                intentLocation()
+            }
+        } else {
+            requestPermission()
+        }
+
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
+
+    private fun checkPermission(): Boolean =
+        ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_REQUEST_ACCESS_LOCATION)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == PERMISSION_REQUEST_ACCESS_LOCATION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation()
+            }
+        } else {
+            showShortToast(this, getString(R.string.error_reject_permission))
+        }
+    }
+
+    private fun intentLocation() {
+        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        startActivity(intent)
+    }
+
+    companion object {
+        private const val PERMISSION_REQUEST_ACCESS_LOCATION = 101
+        private val PERMISSIONS = arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
     }
 
 }
