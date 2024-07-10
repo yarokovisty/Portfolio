@@ -98,6 +98,21 @@ class GetHourlyForecastUseCaseTest {
             Assertions.assertEquals(expected, actual)
         }
 
+    @Test
+    fun `invoke(lon, lat) should return error from repository network`() =
+        runTest {
+            val exception = Exception("Network error")
+            val resultError = Result.Error(exception)
+
+            `when`(repository.getHourlyForecast(LON_BARNAUL, LAT_BARNAUL)).thenReturn(resultError)
+
+            val result = getHourlyForecastUseCase(LON_BARNAUL, LAT_BARNAUL)
+
+            Assertions.assertTrue(result is Result.Error)
+            Assertions.assertTrue((result as Result.Error).exception.message == "Network error")
+        }
+
+
     private companion object {
         const val LON_BARNAUL = 83.76978
         const val LAT_BARNAUL = 53.35478
