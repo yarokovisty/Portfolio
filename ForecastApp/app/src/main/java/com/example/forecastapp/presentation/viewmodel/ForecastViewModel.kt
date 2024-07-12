@@ -75,7 +75,9 @@ class ForecastViewModel @Inject constructor(
                 }
 
                 resultCurrentWeatherItem is Result.Error
-                        || resultListHourlyForecastItem is Result.Error -> {
+                        || resultListHourlyForecastItem is Result.Error
+                        || resultListDailyForecastItem is Result.Error
+                -> {
                     _forecastState.value = ForecastState.Error("Error")
                     isReady = true
                 }
