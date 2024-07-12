@@ -3,8 +3,10 @@ package com.example.forecastapp.domain.usecase
 import com.example.forecastapp.domain.entity.DailyForecastItem
 import com.example.forecastapp.domain.repository.ForecastRepository
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
@@ -17,6 +19,11 @@ class SaveDailyForecastUseCaseTest {
     @BeforeEach
     fun setUp() {
         saveDailyForecastUseCase = SaveDailyForecastUseCase(repository)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        Mockito.reset(repository)
     }
 
     @Test

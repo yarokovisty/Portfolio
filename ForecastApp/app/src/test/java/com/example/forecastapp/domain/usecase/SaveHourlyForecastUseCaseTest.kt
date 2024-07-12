@@ -4,8 +4,10 @@ import com.example.forecastapp.domain.entity.CurrentWeatherItem
 import com.example.forecastapp.domain.entity.HourlyForecastItem
 import com.example.forecastapp.domain.repository.ForecastRepository
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
@@ -18,6 +20,11 @@ class SaveHourlyForecastUseCaseTest {
     @BeforeEach
     fun setUp() {
         saveHourlyForecastUseCase = SaveHourlyForecastUseCase(repository)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        Mockito.reset(repository)
     }
 
     @Test

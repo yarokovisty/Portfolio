@@ -111,8 +111,6 @@ class ForecastViewModel @Inject constructor(
             }
 
 
-
-
         }
 
     }

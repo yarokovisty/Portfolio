@@ -4,9 +4,11 @@ import com.example.forecastapp.domain.entity.DailyForecastItem
 import com.example.forecastapp.domain.entity.Result
 import com.example.forecastapp.domain.repository.ForecastRepository
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.mock
 
@@ -39,6 +41,11 @@ class GetDailyForecastUseCaseTest {
             testDailyForecastItem2,
             testDailyForecastItem3
         )
+    }
+
+    @AfterEach
+    fun tearDown() {
+        Mockito.reset(repository)
     }
 
     @Test
