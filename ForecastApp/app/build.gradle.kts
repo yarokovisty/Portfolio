@@ -58,6 +58,8 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.core.testing)
+
 
     // Dagger 2 - DI
     implementation(libs.dagger)

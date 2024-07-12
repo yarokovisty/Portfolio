@@ -78,9 +78,9 @@ class GetDailyForecastUseCaseTest {
     fun `invoke(lon, lat) should return list daily forecast from repository network`() = runTest {
         val resultSuccess = Result.Success(testListDailyForecastItem)
 
-        `when`(repository.getDailyForecast(LON_BARNAUL, LAT_BARNAUL)).thenReturn(resultSuccess)
+        `when`(repository.getDailyForecast(83.76978, 53.35478)).thenReturn(resultSuccess)
 
-        val actual = getDailyForecastUseCase(LON_BARNAUL, LAT_BARNAUL)
+        val actual = getDailyForecastUseCase(83.76978, 53.35478)
         val expected = Result.Success(
             listOf(
                 DailyForecastItem(
@@ -110,16 +110,13 @@ class GetDailyForecastUseCaseTest {
             val exception = Exception("Network error")
             val resultError = Result.Error(exception)
 
-            `when`(repository.getDailyForecast(LON_BARNAUL, LAT_BARNAUL)).thenReturn(resultError)
+            `when`(repository.getDailyForecast(83.76978, 53.35478)).thenReturn(resultError)
 
-            val result = getDailyForecastUseCase(LON_BARNAUL, LAT_BARNAUL)
+            val result = getDailyForecastUseCase(83.76978, 53.35478)
 
             Assertions.assertTrue(result is Result.Error)
             Assertions.assertTrue((result as Result.Error).exception.message == "Network error")
         }
 
-    private companion object {
-        const val LON_BARNAUL = 83.76978
-        const val LAT_BARNAUL = 53.35478
-    }
+
 }

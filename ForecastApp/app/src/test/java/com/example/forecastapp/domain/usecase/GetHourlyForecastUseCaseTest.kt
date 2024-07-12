@@ -79,9 +79,9 @@ class GetHourlyForecastUseCaseTest {
         runTest {
             val resultSuccess = Result.Success(testListHourlyForecastItem)
 
-            `when`(repository.getHourlyForecast(LON_BARNAUL, LAT_BARNAUL)).thenReturn(resultSuccess)
+            `when`(repository.getHourlyForecast(83.76978, 53.35478)).thenReturn(resultSuccess)
 
-            val actual = getHourlyForecastUseCase(LON_BARNAUL, LAT_BARNAUL)
+            val actual = getHourlyForecastUseCase(83.76978, 53.35478)
             val expected = Result.Success(
                 listOf(
                     HourlyForecastItem(
@@ -111,18 +111,15 @@ class GetHourlyForecastUseCaseTest {
             val exception = Exception("Network error")
             val resultError = Result.Error(exception)
 
-            `when`(repository.getHourlyForecast(LON_BARNAUL, LAT_BARNAUL)).thenReturn(resultError)
+            `when`(repository.getHourlyForecast(83.76978, 53.35478)).thenReturn(resultError)
 
-            val result = getHourlyForecastUseCase(LON_BARNAUL, LAT_BARNAUL)
+            val result = getHourlyForecastUseCase(83.76978, 53.35478)
 
             Assertions.assertTrue(result is Result.Error)
             Assertions.assertTrue((result as Result.Error).exception.message == "Network error")
         }
 
 
-    private companion object {
-        const val LON_BARNAUL = 83.76978
-        const val LAT_BARNAUL = 53.35478
-    }
+
 
 }

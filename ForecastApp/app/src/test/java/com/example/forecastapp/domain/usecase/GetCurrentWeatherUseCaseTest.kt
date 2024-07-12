@@ -58,9 +58,9 @@ class GetCurrentWeatherUseCaseTest {
     fun `invoke(lon, lat) should return current weather from repository network`() = runTest {
         val resultSuccess = Result.Success(testCurrentWeatherItem)
 
-        `when`(repository.getCurrentWeather(LON_BARNAUL, LAT_BARNAUL)).thenReturn(resultSuccess)
+        `when`(repository.getCurrentWeather(83.76978, 53.35478)).thenReturn(resultSuccess)
 
-        val actual = getCurrentWeatherUseCase(LON_BARNAUL, LAT_BARNAUL)
+        val actual = getCurrentWeatherUseCase(83.76978, 53.35478)
         val expected = Result.Success(
             CurrentWeatherItem(
                 800,
@@ -75,8 +75,5 @@ class GetCurrentWeatherUseCaseTest {
         Assertions.assertEquals(expected, actual)
     }
 
-    private companion object {
-        const val LON_BARNAUL = 83.76978
-        const val LAT_BARNAUL = 53.35478
-    }
+
 }
