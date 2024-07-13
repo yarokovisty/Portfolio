@@ -71,7 +71,7 @@ class ForecastRepositoryImpl @Inject constructor(
         lon: Double,
         lat: Double
     ): Result<List<DailyForecastItem>> =
-        when (val result = remoteForecastDataSource.getHourlyForecast(lon, lat)) {
+        when (val result = remoteForecastDataSource.getDailyForecast(lon, lat)) {
             is Result.Success -> {
                 val listHourlyForecastDTO = result.data.list
 
