@@ -3,6 +3,7 @@ package com.example.forecastapp.di.component
 import android.app.Application
 import com.example.forecastapp.di.module.DataModule
 import com.example.forecastapp.di.module.DomainModule
+import com.example.forecastapp.di.module.NetworkModule
 import com.example.forecastapp.di.module.PresentationModule
 import com.example.forecastapp.di.scope.AppScope
 import com.example.forecastapp.ui.MainActivity
@@ -12,6 +13,7 @@ import dagger.Component
 @AppScope
 @Component(
     modules = [
+        NetworkModule::class,
         DataModule::class,
         DomainModule::class,
         PresentationModule::class

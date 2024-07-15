@@ -7,8 +7,6 @@ import com.example.forecastapp.data.datasource.LocalForecastDataSource
 import com.example.forecastapp.data.datasource.LocalForecastDataSourceImpl
 import com.example.forecastapp.data.datasource.RemoteForecastDataSource
 import com.example.forecastapp.data.datasource.RemoteForecastDataSourceImpl
-import com.example.forecastapp.data.network.api.ForecastService
-import com.example.forecastapp.data.network.api.ServiceFactory
 import com.example.forecastapp.data.sharedpreferences.SharedPreferencesHelper
 import com.example.forecastapp.di.scope.AppScope
 import dagger.Binds
@@ -34,9 +32,6 @@ interface DataModule {
         ): SharedPreferencesHelper {
             return SharedPreferencesHelper(application)
         }
-        @Provides
-        fun provideForecastService(): ForecastService =
-            ServiceFactory.forecastService
 
         @AppScope
         @Provides
