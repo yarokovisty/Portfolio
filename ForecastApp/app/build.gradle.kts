@@ -52,15 +52,13 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // Test
+    // Unit test
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.core.testing)
-
-
 
     // Dagger 2 - DI
     implementation(libs.dagger)
@@ -74,6 +72,7 @@ dependencies {
     implementation(libs.okhttp3.logging.interceptor)
     implementation(libs.okhttp)
     implementation(libs.mockwebserver)
+    androidTestImplementation(libs.mockwebserver)
 
     // Room
     implementation(libs.androidx.room.ktx)
@@ -85,6 +84,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.fragment.ktx)
+
 }
 
 tasks.withType<Test> {

@@ -1,5 +1,6 @@
 package com.example.forecastapp.data.datasource
 
+import android.util.Log
 import com.example.forecastapp.data.network.api.ForecastService
 import com.example.forecastapp.data.network.dto.currentweatherdto.CurrentWeatherDTO
 import com.example.forecastapp.data.network.dto.hourlyforecastdto.HourlyForecastDTO
