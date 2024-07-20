@@ -6,7 +6,7 @@ Weather App is a single-screen weather forecast application showing for the curr
 2. Daily weather forecast (5*3 hours): time, weather type, temperature
 3. Weather forecast for the week: day of the week, month, date, temperature, weather type
 ## :iphone: UI/UX
-<img src="https://github.com/yarokovisty/Portfolio/blob/main/ForecastApp/img/img_readme.jpg" width="260">&emsp;<img src="/results/screenshot_2.png" width="260">&emsp;
+<img src="img.jpg" width="260">&emsp;
 ## Technology Stack
 * Clean architecture
 * MVVM
