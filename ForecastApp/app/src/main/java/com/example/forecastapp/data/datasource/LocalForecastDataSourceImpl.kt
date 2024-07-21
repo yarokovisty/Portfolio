@@ -1,12 +1,10 @@
 package com.example.forecastapp.data.datasource
 
-import android.util.Log
 import com.example.forecastapp.data.database.ForecastDao
 import com.example.forecastapp.data.database.model.DailyForecastDbModel
 import com.example.forecastapp.data.database.model.HourlyForecastDbModel
 import com.example.forecastapp.data.sharedpreferences.SharedPreferencesHelper
 import com.example.forecastapp.domain.entity.CurrentWeatherItem
-import com.example.forecastapp.domain.entity.HourlyForecastItem
 import javax.inject.Inject
 
 class LocalForecastDataSourceImpl @Inject constructor(

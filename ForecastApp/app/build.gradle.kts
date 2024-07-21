@@ -15,8 +15,12 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        val apiKey = "bc509216035463e1774a8d5c0ae0b096"
+
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField("String", "API_KEY", "\"${apiKey}\"")
     }
 
     buildTypes {
@@ -37,6 +41,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -90,3 +95,4 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+

@@ -1,5 +1,6 @@
 package com.example.forecastapp.data.repository
 
+import com.example.forecastapp.TestUtils
 import com.example.forecastapp.data.database.model.DailyForecastDbModel
 import com.example.forecastapp.data.datasource.LocalForecastDataSource
 import com.example.forecastapp.data.datasource.RemoteForecastDataSource
@@ -46,62 +47,13 @@ class ForecastRepositoryDailyForecastTest {
             mapper
         )
 
-        val dailyForecastDTO = HourlyForecastDTO(
-            cod = "200",
-            message = 0,
-            cnt = 40,
-            list = listOf(
-                WeatherData(
-                    dt = 1661871600,
-                    main = Main(
-                        temp = 298.48,
-                        feelsLike = 296.98,
-                        tempMin = 296.76,
-                        tempMax = 297.87,
-                        pressure = 1015,
-                        seaLevel = 1015,
-                        grndLevel = 933,
-                        humidity = 69,
-                        tempKf = -1.11
-                    ),
-                    weather = listOf(
-                        Weather(
-                            id = 800,
-                            main = "Sunny",
-                            description = "clear",
-                            icon = "10d"
-                        )
-                    ),
-                    clouds = Clouds(all = 100),
-                    wind = Wind(
-                        speed = 1.14,
-                        deg = 17,
-                        gust = 1.57
-                    ),
-                    visibility = 10000,
-                    pop = 0F,
-                    sys = Sys(pod = "d"),
-                    dtTxt = "2022-09-04 12:00:00",
-                    rain = Rain(threeHour = 0.26)
-                )
-            ),
-            city = City(
-                id = 3163858,
-                name = "Zocca",
-                coord = Coord(
-                    lat = 44.34,
-                    lon = 10.99
-                ),
-                country = "IT",
-                population = 4593,
-                timezone = 7200,
-                sunrise = 1661834187,
-                sunset = 1661882248
-            )
+        val dailyForecastDTO = TestUtils.readJsonFromFile(
+            "mock_hourly_forecast.json",
+            HourlyForecastDTO::class.java
         )
         val dailyForecast = listOf(DailyForecastItem(800, "пт, июл. 13", 296))
 
-        coEvery { remoteForecastDataSource.getDailyForecast(44.34, 10.9) } returns
+        coEvery { remoteForecastDataSource.getHourlyForecast(44.34, 10.9) } returns
                 Result.Success(dailyForecastDTO)
         coEvery { mapper.mapHourlyForecastDTOtoDaileForecastItem(dailyForecastDTO.list) } returns
                 dailyForecast
@@ -120,7 +72,7 @@ class ForecastRepositoryDailyForecastTest {
             mapper
         )
 
-        coEvery { remoteForecastDataSource.getDailyForecast(44.34, 10.9) } returns
+        coEvery { remoteForecastDataSource.getHourlyForecast(44.34, 10.9) } returns
                 Result.Error(Exception("Error"))
 
         val expected = Result.Error(Exception("Error"))

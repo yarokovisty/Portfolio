@@ -3,7 +3,6 @@ package com.example.forecastapp.data.mapper
 import com.example.forecastapp.data.database.model.DailyForecastDbModel
 import com.example.forecastapp.data.database.model.HourlyForecastDbModel
 import com.example.forecastapp.data.network.dto.currentweatherdto.CurrentWeatherDTO
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.HourlyForecastDTO
 import com.example.forecastapp.data.network.dto.hourlyforecastdto.WeatherData
 import com.example.forecastapp.domain.entity.CurrentWeatherItem
 import com.example.forecastapp.domain.entity.DailyForecastItem

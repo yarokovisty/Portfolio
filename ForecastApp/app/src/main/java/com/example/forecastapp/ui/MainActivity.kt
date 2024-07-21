@@ -12,7 +12,6 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -31,6 +30,13 @@ import com.example.forecastapp.util.WeatherUtils
 import com.example.forecastapp.util.showShortToast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -71,10 +77,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadData() {
-        if (isOnline(this)) {
-            getCurrentLocation()
-        } else {
-            viewModel.loadDataFromDb()
+        CoroutineScope(Dispatchers.Main).launch {
+            val isOnline = withContext(Dispatchers.IO) { isOnline(this@MainActivity) }
+            if (isOnline) {
+                getCurrentLocation()
+            } else {
+                viewModel.loadDataFromDb()
+            }
         }
     }
 
@@ -240,7 +249,15 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun isOnline(context: Context): Boolean {
+    private suspend fun isOnline(context: Context): Boolean {
+        return if (isNetworkAvailable(context)) {
+            isInternetAvailable()
+        } else {
+            false
+        }
+    }
+
+    private fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return false
@@ -252,6 +269,23 @@ class MainActivity : AppCompatActivity() {
             else -> false
         }
     }
+
+    private suspend fun isInternetAvailable(): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                val url = URL(GOOGLE_URL)
+                val urlConnection = url.openConnection() as HttpURLConnection
+                urlConnection.connectTimeout = 3000
+                urlConnection.connect()
+                val responseCode = urlConnection.responseCode
+                urlConnection.disconnect()
+                responseCode == 200
+            } catch (e: IOException) {
+                false
+            }
+        }
+    }
+
 
     private fun setLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -319,6 +353,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val GOOGLE_URL = "https://www.google.com"
         private const val PERMISSION_REQUEST_ACCESS_LOCATION = 101
         private val PERMISSIONS = arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,

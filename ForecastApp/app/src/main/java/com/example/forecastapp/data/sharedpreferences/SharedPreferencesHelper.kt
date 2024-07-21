@@ -15,7 +15,7 @@ class SharedPreferencesHelper @Inject constructor(context: Context) {
         val editor = sharedPreferences.edit()
         val gson = Gson()
         val json = gson.toJson(weatherItem)
-        editor.putString("current_weather_item", json)
+        editor.putString(PREF_KEY, json)
         editor.apply()
     }
 

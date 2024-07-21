@@ -78,8 +78,7 @@ class ForecastViewModel @Inject constructor(
                         || resultListHourlyForecastItem is Result.Error
                         || resultListDailyForecastItem is Result.Error
                 -> {
-                    _forecastState.value = ForecastState.Error("Error")
-                    isReady = true
+                    _forecastState.value = ForecastState.Error("Error with Internet")
                 }
             }
         }
@@ -102,14 +101,13 @@ class ForecastViewModel @Inject constructor(
                         dailyForecast
                     )
                 } else {
-                    _forecastState.value = ForecastState.Error("Error")
+                    _forecastState.value = ForecastState.Error("Error with Internet")
                 }
 
                 isReady = true
 
             } catch (ex: Exception) {
-                _forecastState.value = ForecastState.Error("Error")
-                isReady = true
+                _forecastState.value = ForecastState.Error("Error with Internet")
             }
 
 

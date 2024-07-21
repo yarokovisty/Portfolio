@@ -1,5 +1,6 @@
 package com.example.forecastapp.data.repository
 
+import com.example.forecastapp.TestUtils
 import com.example.forecastapp.data.datasource.LocalForecastDataSource
 import com.example.forecastapp.data.datasource.RemoteForecastDataSource
 import com.example.forecastapp.data.mapper.ForecastMapper
@@ -13,6 +14,8 @@ import com.example.forecastapp.data.network.dto.currentweatherdto.Weather
 import com.example.forecastapp.data.network.dto.currentweatherdto.Wind
 import com.example.forecastapp.domain.entity.CurrentWeatherItem
 import com.example.forecastapp.domain.entity.Result
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -21,8 +24,16 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.io.File
 
 class ForecastRepositoryCurrentWeatherTest {
+
+    private val gson = Gson()
+
+    private fun readJsonFromFile(fileName: String): String {
+        val file = File(javaClass.classLoader!!.getResource(fileName).file)
+        return file.readText()
+    }
 
     private val localForecastDataSource = mockk<LocalForecastDataSource>(relaxed = true)
     private val remoteForecastDataSource = mockk<RemoteForecastDataSource>()
@@ -41,38 +52,9 @@ class ForecastRepositoryCurrentWeatherTest {
             mapper
         )
 
-        val currentWeatherDTO = CurrentWeatherDTO(
-            coord = Coord(lat = 10.99, lon = 44.34),
-            weather = listOf(
-                Weather(id = 501, main = "Rain", description = "moderate rain", icon = "10d")
-            ),
-            base = "stations",
-            main = Main(
-                temp = 298.48,
-                feels_like = 298.74,
-                temp_min = 297.56,
-                temp_max = 300.05,
-                pressure = 1015,
-                humidity = 64,
-                sea_level = 1014,
-                grnd_level = 933
-            ),
-            visibility = 10000,
-            wind = Wind(speed = 0.62, deg = 349, gust = 1.18),
-            rain = Rain(`1h` = 3.16),
-            clouds = Clouds(all = 100),
-            dt = 1661870592,
-            sys = Sys(
-                type = 2,
-                id = 2075663,
-                country = "IT",
-                sunrise = 1661834187,
-                sunset = 1661882248
-            ),
-            timezone = 7200,
-            id = 1661882248,
-            name = "Zocca",
-            cod = 200
+        val currentWeatherDTO = TestUtils.readJsonFromFile(
+            "mock_current_weather.json",
+            CurrentWeatherDTO::class.java
         )
         val currentWeatherItem = CurrentWeatherItem(
             501,

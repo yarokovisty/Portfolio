@@ -1,0 +1,59 @@
+{
+  "cod": "200",
+  "message": 0,
+  "cnt": 40,
+  "list": [
+    {
+      "dt": 1661871600,
+      "main": {
+        "temp": 298.48,
+        "feels_like": 296.98,
+        "temp_min": 296.76,
+        "temp_max": 297.87,
+        "pressure": 1015,
+        "sea_level": 1015,
+        "grnd_level": 933,
+        "humidity": 69,
+        "temp_kf": -1.11
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Sunny",
+          "description": "clear",
+          "icon": "10d"
+        }
+      ],
+      "clouds": {
+        "all": 100
+      },
+      "wind": {
+        "speed": 1.14,
+        "deg": 17,
+        "gust": 1.57
+      },
+      "visibility": 10000,
+      "pop": 0,
+      "sys": {
+        "pod": "d"
+      },
+      "dt_txt": "2022-09-04 12:00:00",
+      "rain": {
+        "3h": 0.26
+      }
+    }
+  ],
+  "city": {
+    "id": 3163858,
+    "name": "Zocca",
+    "coord": {
+      "lat": 44.34,
+      "lon": 10.99
+    },
+    "country": "IT",
+    "population": 4593,
+    "timezone": 7200,
+    "sunrise": 1661834187,
+    "sunset": 1661882248
+  }
+}

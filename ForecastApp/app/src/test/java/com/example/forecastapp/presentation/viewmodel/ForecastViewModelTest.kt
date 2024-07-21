@@ -158,7 +158,7 @@ class ForecastViewModelTest {
 
         viewModel.loadDataFromNetwork(10.0, 10.0)
 
-        val expected = ForecastState.Error("Error")
+        val expected = ForecastState.Error("Error with Internet")
         val actual = viewModel.forecastState.value
 
         Assertions.assertEquals(expected, actual)
@@ -186,7 +186,7 @@ class ForecastViewModelTest {
 
         viewModel.loadDataFromNetwork(10.0, 10.0)
 
-        val expected = ForecastState.Error("Error")
+        val expected = ForecastState.Error("Error with Internet")
         val actual = viewModel.forecastState.value
 
         Assertions.assertEquals(expected, actual)
@@ -214,7 +214,7 @@ class ForecastViewModelTest {
 
         viewModel.loadDataFromNetwork(10.0, 10.0)
 
-        val expected = ForecastState.Error("Error")
+        val expected = ForecastState.Error("Error with Internet")
         val actual = viewModel.forecastState.value
 
         Assertions.assertEquals(expected, actual)
@@ -277,7 +277,7 @@ class ForecastViewModelTest {
 
         viewModel.loadDataFromDb()
 
-        val expected = ForecastState.Error("Error")
+        val expected = ForecastState.Error("Error with Internet")
         val actual = viewModel.forecastState.value
 
         Assertions.assertEquals(expected, actual)
@@ -299,7 +299,7 @@ class ForecastViewModelTest {
 
         viewModel.loadDataFromDb()
 
-        val expected = ForecastState.Error("Error")
+        val expected = ForecastState.Error("Error with Internet")
         val actual = viewModel.forecastState.value
 
         Assertions.assertEquals(expected, actual)
@@ -321,7 +321,7 @@ class ForecastViewModelTest {
 
         viewModel.loadDataFromDb()
 
-        val expected = ForecastState.Error("Error")
+        val expected = ForecastState.Error("Error with Internet")
         val actual = viewModel.forecastState.value
 
         Assertions.assertEquals(expected, actual)
@@ -343,7 +343,7 @@ class ForecastViewModelTest {
 
         viewModel.loadDataFromDb()
 
-        val expected = ForecastState.Error("Error")
+        val expected = ForecastState.Error("Error with Internet")
         val actual = viewModel.forecastState.value
 
         Assertions.assertEquals(expected, actual)
