@@ -4,18 +4,9 @@ import com.example.forecastapp.TestUtils
 import com.example.forecastapp.data.datasource.LocalForecastDataSource
 import com.example.forecastapp.data.datasource.RemoteForecastDataSource
 import com.example.forecastapp.data.mapper.ForecastMapper
-import com.example.forecastapp.data.network.dto.currentweatherdto.Clouds
-import com.example.forecastapp.data.network.dto.currentweatherdto.Coord
 import com.example.forecastapp.data.network.dto.currentweatherdto.CurrentWeatherDTO
-import com.example.forecastapp.data.network.dto.currentweatherdto.Main
-import com.example.forecastapp.data.network.dto.currentweatherdto.Rain
-import com.example.forecastapp.data.network.dto.currentweatherdto.Sys
-import com.example.forecastapp.data.network.dto.currentweatherdto.Weather
-import com.example.forecastapp.data.network.dto.currentweatherdto.Wind
 import com.example.forecastapp.domain.entity.CurrentWeatherItem
 import com.example.forecastapp.domain.entity.Result
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -24,16 +15,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import java.io.File
 
 class ForecastRepositoryCurrentWeatherTest {
 
-    private val gson = Gson()
-
-    private fun readJsonFromFile(fileName: String): String {
-        val file = File(javaClass.classLoader!!.getResource(fileName).file)
-        return file.readText()
-    }
 
     private val localForecastDataSource = mockk<LocalForecastDataSource>(relaxed = true)
     private val remoteForecastDataSource = mockk<RemoteForecastDataSource>()
@@ -56,13 +40,9 @@ class ForecastRepositoryCurrentWeatherTest {
             "mock_current_weather.json",
             CurrentWeatherDTO::class.java
         )
-        val currentWeatherItem = CurrentWeatherItem(
-            501,
-            "moderate rain",
-            298,
-            1,
-            64,
-            10000
+        val currentWeatherItem = TestUtils.readJsonFromFile(
+            "mock_current_weather_item.json",
+            CurrentWeatherItem::class.java
         )
 
         coEvery { remoteForecastDataSource.getCurrentWeather(44.34, 10.9) } returns Result.Success(
@@ -107,22 +87,16 @@ class ForecastRepositoryCurrentWeatherTest {
             mapper
         )
 
-        coEvery { localForecastDataSource.getCurrentWeather() } returns CurrentWeatherItem(
-            800,
-            "Sunny",
-            31,
-            2,
-            30,
-            10000
+        val currentWeatherItem = TestUtils.readJsonFromFile(
+            "mock_current_weather_item.json",
+            CurrentWeatherItem::class.java
         )
 
-        val expected = CurrentWeatherItem(
-            800,
-            "Sunny",
-            31,
-            2,
-            30,
-            10000
+        coEvery { localForecastDataSource.getCurrentWeather() } returns currentWeatherItem
+
+        val expected = TestUtils.readJsonFromFile(
+            "mock_current_weather_item.json",
+            CurrentWeatherItem::class.java
         )
         val actual = repository.getCurrentWeather()
 
@@ -152,7 +126,10 @@ class ForecastRepositoryCurrentWeatherTest {
             remoteForecastDataSource,
             mapper
         )
-        val currentWeatherItem = CurrentWeatherItem(800, "Sunny", 25, 3, 30, 10)
+        val currentWeatherItem = TestUtils.readJsonFromFile(
+            "mock_current_weather_item.json",
+            CurrentWeatherItem::class.java
+        )
 
         repository.saveCurrentWeather(currentWeatherItem)
 

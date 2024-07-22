@@ -5,18 +5,8 @@ import com.example.forecastapp.data.database.model.DailyForecastDbModel
 import com.example.forecastapp.data.datasource.LocalForecastDataSource
 import com.example.forecastapp.data.datasource.RemoteForecastDataSource
 import com.example.forecastapp.data.mapper.ForecastMapper
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.City
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Clouds
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Coord
 import com.example.forecastapp.data.network.dto.hourlyforecastdto.HourlyForecastDTO
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Main
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Rain
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Sys
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Weather
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.WeatherData
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Wind
 import com.example.forecastapp.domain.entity.DailyForecastItem
-import com.example.forecastapp.domain.entity.HourlyForecastItem
 import com.example.forecastapp.domain.entity.Result
 import io.mockk.clearMocks
 import io.mockk.coEvery
@@ -51,7 +41,10 @@ class ForecastRepositoryDailyForecastTest {
             "mock_hourly_forecast.json",
             HourlyForecastDTO::class.java
         )
-        val dailyForecast = listOf(DailyForecastItem(800, "пт, июл. 13", 296))
+        val dailyForecast = listOf(TestUtils.readJsonFromFile(
+            "mock_daily_forecast_item.json",
+            DailyForecastItem::class.java
+        ))
 
         coEvery { remoteForecastDataSource.getHourlyForecast(44.34, 10.9) } returns
                 Result.Success(dailyForecastDTO)
@@ -93,16 +86,25 @@ class ForecastRepositoryDailyForecastTest {
             mapper
         )
 
+        val dailyForecastItem = TestUtils.readJsonFromFile(
+            "mock_daily_forecast_item.json",
+            DailyForecastItem::class.java
+        )
+        val dailyForecastDbModel = TestUtils.readJsonFromFile(
+            "mock_daily_forecast_db_model.json",
+            DailyForecastDbModel::class.java
+        )
+
         coEvery { localForecastDataSource.getDailyForecast() } returns listOf(
-            DailyForecastDbModel(800, "пт, июл. 13", 30)
+            dailyForecastDbModel
         )
         coEvery {
             mapper.mapDailyForecastDbModelToDailyForecastItem(
-                DailyForecastDbModel(800, "пт, июл. 13", 30)
+                dailyForecastDbModel
             )
-        } returns DailyForecastItem(800, "пт, июл. 13", 30)
+        } returns dailyForecastItem
 
-        val expected = listOf(DailyForecastItem(800, "пт, июл. 13", 30))
+        val expected = listOf(dailyForecastItem)
         val actual = repository.getDailyForecast()
 
         Assertions.assertEquals(expected, actual)
@@ -116,8 +118,14 @@ class ForecastRepositoryDailyForecastTest {
             mapper
         )
 
-        val dailyForecastItem = DailyForecastItem(id = 601, date = "2024-07-13", temp = 20)
-        val dailyForecastDbModel = DailyForecastDbModel(id = 601, date = "2024-07-13", temp = 20)
+        val dailyForecastItem = TestUtils.readJsonFromFile(
+            "mock_daily_forecast_item.json",
+            DailyForecastItem::class.java
+        )
+        val dailyForecastDbModel = TestUtils.readJsonFromFile(
+            "mock_daily_forecast_db_model.json",
+            DailyForecastDbModel::class.java
+        )
 
         val listDailyForecastItem = listOf(dailyForecastItem)
         val listDailyForecastDbModel = listOf(dailyForecastDbModel)

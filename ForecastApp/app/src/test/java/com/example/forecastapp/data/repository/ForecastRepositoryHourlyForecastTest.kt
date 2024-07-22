@@ -5,16 +5,7 @@ import com.example.forecastapp.data.database.model.HourlyForecastDbModel
 import com.example.forecastapp.data.datasource.LocalForecastDataSource
 import com.example.forecastapp.data.datasource.RemoteForecastDataSource
 import com.example.forecastapp.data.mapper.ForecastMapper
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.City
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Clouds
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Coord
 import com.example.forecastapp.data.network.dto.hourlyforecastdto.HourlyForecastDTO
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Main
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Rain
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Sys
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Weather
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.WeatherData
-import com.example.forecastapp.data.network.dto.hourlyforecastdto.Wind
 import com.example.forecastapp.domain.entity.HourlyForecastItem
 import com.example.forecastapp.domain.entity.Result
 import io.mockk.clearMocks
@@ -50,7 +41,12 @@ class ForecastRepositoryHourlyForecastTest {
             "mock_hourly_forecast.json",
             HourlyForecastDTO::class.java
         )
-        val hourlyForecast = listOf(HourlyForecastItem(800, "12:00", 296))
+        val hourlyForecast = listOf(
+            TestUtils.readJsonFromFile(
+                "mock_hourly_forecast_item.json",
+                HourlyForecastItem::class.java
+            )
+        )
 
         coEvery { remoteForecastDataSource.getHourlyForecast(44.34, 10.9) } returns
                 Result.Success(hourlyForecastDTO)
@@ -92,16 +88,30 @@ class ForecastRepositoryHourlyForecastTest {
             mapper
         )
 
+        val hourlyForecastItem = TestUtils.readJsonFromFile(
+            "mock_hourly_forecast_item.json",
+            HourlyForecastItem::class.java
+        )
+        val hourlyForecastDbModel = TestUtils.readJsonFromFile(
+            "mock_hourly_forecast_db_model.json",
+            HourlyForecastDbModel::class.java
+        )
+
         coEvery { localForecastDataSource.getHourlyForecast() } returns listOf(
-            HourlyForecastDbModel(800, "12:00", 30)
+            hourlyForecastDbModel
         )
         coEvery {
             mapper.mapHourlyForecastDbModelToHourlyForecastItem(
-                HourlyForecastDbModel(800, "12:00", 30)
+                hourlyForecastDbModel
             )
-        } returns HourlyForecastItem(800, "12:00", 30)
+        } returns hourlyForecastItem
 
-        val expected = listOf(HourlyForecastItem(800, "12:00", 30))
+        val expected = listOf(
+            TestUtils.readJsonFromFile(
+                "mock_hourly_forecast_item.json",
+                HourlyForecastItem::class.java
+            )
+        )
         val actual = repository.getHourlyForecast()
 
         Assertions.assertEquals(expected, actual)
@@ -115,14 +125,23 @@ class ForecastRepositoryHourlyForecastTest {
             mapper
         )
 
+        val hourlyForecastItem = TestUtils.readJsonFromFile(
+            "mock_hourly_forecast_item.json",
+            HourlyForecastItem::class.java
+        )
+        val hourlyForecastDbModel = TestUtils.readJsonFromFile(
+            "mock_hourly_forecast_db_model.json",
+            HourlyForecastDbModel::class.java
+        )
+
         val hourlyForecastItems = listOf(
-            HourlyForecastItem(801, "Cloudy", 22),
-            HourlyForecastItem(802, "Sunny", 24)
+            hourlyForecastItem,
+            hourlyForecastItem
         )
 
         val dbModels = listOf(
-            HourlyForecastDbModel(801, "Cloudy", 22),
-            HourlyForecastDbModel(802, "Sunny", 24)
+            hourlyForecastDbModel,
+            hourlyForecastDbModel
         )
 
         every { mapper.mapHourlyForecastItemToHourlyForecastDbModel(hourlyForecastItems[0]) } returns dbModels[0]
@@ -134,14 +153,15 @@ class ForecastRepositoryHourlyForecastTest {
     }
 
     @Test
-    fun `clearHourlyForecast should call clearHourlyForecast on localForecastDataSource`() = runTest {
-        val repository = ForecastRepositoryImpl(
-            localForecastDataSource,
-            remoteForecastDataSource,
-            mapper
-        )
+    fun `clearHourlyForecast should call clearHourlyForecast on localForecastDataSource`() =
+        runTest {
+            val repository = ForecastRepositoryImpl(
+                localForecastDataSource,
+                remoteForecastDataSource,
+                mapper
+            )
 
-        repository.clearHourlyForecast()
-        coVerify { localForecastDataSource.clearHourlyForecast() }
-    }
+            repository.clearHourlyForecast()
+            coVerify { localForecastDataSource.clearHourlyForecast() }
+        }
 }
