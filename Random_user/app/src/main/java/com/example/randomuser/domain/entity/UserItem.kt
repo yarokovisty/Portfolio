@@ -14,5 +14,6 @@ data class UserItem(
     val lon: Double,
     val country: String,
     val state: String,
-    val city: String
+    val city: String,
+    val nat: String
 )
