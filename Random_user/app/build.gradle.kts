@@ -58,4 +58,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
+    // OkHttp3
+    implementation(libs.okhttp)
+    implementation(libs.okhttp3.logging.interceptor)
+
 }
