@@ -8,7 +8,7 @@ sealed class UserListState {
 
     data object Loading : UserListState()
 
-    data class Success(val userList: List<UserItem>)
+    data class Success(val userList: List<UserItem>) : UserListState()
 
-    data class Error(val errorMessage: String)
+    data class Error(val errorMessage: String) : UserListState()
 }

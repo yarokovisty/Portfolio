@@ -50,6 +50,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // Coroutines
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
     // Dagger 2 - DI
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
