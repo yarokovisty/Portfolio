@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="paddingVerticalCardView">8dp</dimen>
+    <dimen name="paddingHorizontalCardView">16dp</dimen>
+
+    <dimen name="marginMedium">16dp</dimen>
+    
+    <dimen name="cornerSizeCardView">8dp</dimen>
+</resources>

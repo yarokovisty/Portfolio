@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="primaryBackground">#2e2e2e</color>
+    <color name="secondaryBackground">#474747</color>
+
+    <color name="primaryFont">#fff</color>
+    <color name="secondaryFont">#38c95f</color>
+    <color name="thirdFont">#2f4ae0</color>
+
+    <color name="primaryIcon">#fff</color>
+</resources>
