@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="IconCardView">
+        <item name="android:layout_width">@dimen/sizeCircleIconCardView</item>
+        <item name="android:layout_height">@dimen/sizeCircleIconCardView</item>
+        <item name="shapeAppearanceOverlay">@style/RoundedImageView</item>
+    </style>
+
+    <style name="RoundedImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="Custom.Base.Toolbar" parent="Widget.Material3.Toolbar">
         <item name="android:background">@color/primaryBackground</item>
     </style>
@@ -10,7 +21,7 @@
         <item name="cardCornerRadius">@dimen/cornerSizeCardView</item>
         <item name="contentPaddingTop">@dimen/paddingVerticalCardView</item>
         <item name="contentPaddingBottom">@dimen/paddingVerticalCardView</item>
-        <item name="contentPaddingStart">@dimen/paddingHorizontalCardView</item>
-        <item name="contentPaddingEnd">@dimen/paddingHorizontalCardView</item>
+        <item name="contentPaddingRight">@dimen/paddingHorizontalCardView</item>
+        <item name="contentPaddingLeft">@dimen/paddingHorizontalCardView</item>
     </style>
 </resources>

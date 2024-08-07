@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    // Common
+    <dimen name="marginSmall">4dp</dimen>
+    <dimen name="marginLittle">8dp</dimen>
+    <dimen name="marginMedium">16dp</dimen>
+    <dimen name="marginLarge">24dp</dimen>
+    <dimen name="marginBig">32dp</dimen>
+    <dimen name="marginHuge">48dp</dimen>
+
+    // CardView
     <dimen name="paddingVerticalCardView">8dp</dimen>
     <dimen name="paddingHorizontalCardView">16dp</dimen>
+    <dimen name="cornerSizeCardView">4dp</dimen>
 
-    <dimen name="marginMedium">16dp</dimen>
-    
-    <dimen name="cornerSizeCardView">8dp</dimen>
+    // ImageView
+    <dimen name="sizeCircleIconCardView">40dp</dimen>
 </resources>
