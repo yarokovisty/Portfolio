@@ -10,12 +10,13 @@ class RemoteDataSourceImpl @Inject constructor(
 ) : RemoteDataSource {
 
     override suspend fun getUserList(): Result<List<UserDTO>> =
-        try {
-            val userListDTO = userService.getUserList().results
-            Result.Success(userListDTO)
-        } catch (ex: Exception) {
-            Result.Error(ex)
-        }
+        Result.Success(userService.getUserList().results)
+//        try {
+//            val userListDTO = userService.getUserList().results
+//            Result.Success(userListDTO)
+//        } catch (ex: Exception) {
+//            Result.Error(ex)
+//        }
 
 
 }

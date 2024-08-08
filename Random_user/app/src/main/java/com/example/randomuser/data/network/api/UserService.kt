@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface UserService {
 
-    @GET("api/?")
+    @GET("api/")
     suspend fun getUserList(
         @Query("results") result: Int = COUNT_USER
     ): ResultDTO

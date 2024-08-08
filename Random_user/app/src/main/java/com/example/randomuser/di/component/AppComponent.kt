@@ -7,6 +7,7 @@ import com.example.randomuser.di.module.NetworkModule
 import com.example.randomuser.di.module.PresentationModule
 import com.example.randomuser.di.scope.AppScope
 import com.example.randomuser.ui.MainActivity
+import com.example.randomuser.ui.UserListFragment
 import dagger.BindsInstance
 import dagger.Component
 
@@ -22,6 +23,7 @@ import dagger.Component
 interface AppComponent {
 
     fun inject(activity: MainActivity)
+    fun inject(fragment: UserListFragment)
 
     @Component.Factory
     interface Factory {
